@@ -23,7 +23,7 @@ _G.configuration = {
         boxingmoveset = true, -- farms using boxing moveset (farms boxing if it doesnt already have it)
     },
     other = {
-        mask = true, -- automatically masks the account
+        mask = false, -- automatically masks the account
         unjail = true, -- automatically unjails the account
     },
     serverhop = {
@@ -42,8 +42,8 @@ _G.configuration = {
         },
     },
     webhook = {
-        link = "", -- webhook link
-        interval = 60, -- sends webhook after (seconds) passes
+        link = "https://discord.com/api/webhooks/1226990588721758240/h6xZqIiMf7I60jCdOOimWwRR21BNwq3PTtRt8Ks5gLByaaBgwom6Gtal8WszxsfNFvjT", -- webhook link
+        interval = 900, -- sends webhook after (seconds) passes
     },
 }
 
