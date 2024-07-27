@@ -34,12 +34,14 @@ _G.configuration = {
         leaveinterval = 0, -- leaves after (seconds) (leave on 0 if you want it to be disabled)
         onjoined = false, -- leaves if a player with the same id in joinedids joins
         joinedids = {
-
+            3068220681, 3083889210, 3083891022, 3083892540, 3083894051, 
+            3083895514, 3301167626, 3301171525, 3301172896, 3301175464, 
+            3301176405, 3301177451, 3301178340, 3301179293, 3301180270, 
+            3301181373, 3301182850, 3301184471, 3301185659, 3301187082, 
+            3301188358, 3301189447, 3301191149, 3301192472, 3301195894,
         },
         onloaded = false, -- leaves if a account with the same id in loadedids is already in the server
-        loadedids = {
-
-        },
+        loadedids = {},
     },
     webhook = {
         link = "https://discord.com/api/webhooks/1226990588721758240/h6xZqIiMf7I60jCdOOimWwRR21BNwq3PTtRt8Ks5gLByaaBgwom6Gtal8WszxsfNFvjT", -- webhook link
