@@ -1,4 +1,4 @@
-cript_key="ziIZudhQwwkBGXqzGOdLdHQgOxmCtYWo";
+cript_key="DqDXDdYhnabWJMnwRUjMmWZLxOBpfyoF";
 _G.Config = {
     ["host"] = 3311210222, -- HostID
     ["fps"] = 3, -- Alts Fps Cap
