@@ -1,12 +1,12 @@
-script_key="OVDrKaYXYgFrgOvvFgdRlHaAPaDgIALM";
+cript_key="ziIZudhQwwkBGXqzGOdLdHQgOxmCtYWo";
 _G.Config = {
     ["host"] = 3311210222, -- HostID
-    ["fps"] = 5, -- Alts Fps Cap
+    ["fps"] = 3, -- Alts Fps Cap
 
     ["options"] = {
         ["prefix"] = "/", -- Prefix For Commands
         ["Rendering"] = false, -- Set To True or False If Mem Leak.
-        ["Cashdel"] = true, -- Enable Cashdel Upon Executing
+        ["Cashdel"] = false, -- Enable Cashdel Upon Executing
     },
 
     ["Alts"] = { -- Alts UserID
