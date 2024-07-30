@@ -1,6 +1,6 @@
 script_key="zvLFWFdFjLnyaymaMqYxfFTNThFBKvGV";
 _G.Config = {
-    ["host"] = 1234567890, -- HostID
+    ["host"] = 3311210222, -- HostID
     ["fps"] = 3, -- Alts Fps Cap
 
     ["options"] = {
