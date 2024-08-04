@@ -8,7 +8,7 @@ getgenv().Accounts = {OWNER = 'xk5ng', STAND = "4k7nz"} This is just the example
 
 --\\-- Accounts --//--
 
-getgenv().Accounts = {OWNER = "Q5U00", STAND = "tienacyndia"}
+getgenv().Accounts = {OWNER = "Q5U00", STAND = "SNOOP_BOSS1"}
 
 --\\-- Stand-Configuration --//--
 
