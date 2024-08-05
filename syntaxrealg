@@ -13,7 +13,7 @@ _G.configuration = {
         shoe = true, -- farms shoes
         hospital = true, -- farms hospital
         spawnedcash = {
-            toggle = true, -- farms dropped cash / spawned cash
+            toggle = false, -- farms dropped cash / spawned cash
             tweenspeed = 1, -- speed of teleport
             finishdelay = 1, -- speed of pickup
         },
