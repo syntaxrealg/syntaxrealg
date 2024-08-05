@@ -1,3 +1,5 @@
+script_key="cCvDhgYzWGxmWSdBOlVbwHjJIilbvSUS"
+
 _G.configuration = {
     behavior = {
         fps = 8, -- frame limit (lower results in less cpu usage but can affect cash being made)
@@ -13,7 +15,7 @@ _G.configuration = {
         shoe = true, -- farms shoes
         hospital = true, -- farms hospital
         spawnedcash = {
-            toggle = false, -- farms dropped cash / spawned cash
+            toggle = true, -- farms dropped cash / spawned cash
             tweenspeed = 1, -- speed of teleport
             finishdelay = 1, -- speed of pickup
         },
@@ -42,7 +44,9 @@ _G.configuration = {
             7133075967, 7133067404, 7133050081, 7133050146, 7133058004
         },
         onloaded = false, -- leaves if an account with the same id in loadedids is already in the server
-        loadedids = {},
+        loadedids = {
+
+        },
     },
     webhook = {
         link = "https://discord.com/api/webhooks/1226990588721758240/h6xZqIiMf7I60jCdOOimWwRR21BNwq3PTtRt8Ks5gLByaaBgwom6Gtal8WszxsfNFvjT", -- webhook link
@@ -50,4 +54,4 @@ _G.configuration = {
     },
 }
 
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/74e3b194eb560d1324b8b6df78755b5e.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/9c53b857c733320e64332c171f813e50.lua"))()
