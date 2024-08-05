@@ -1,5 +1,3 @@
-script_key="cCvDhgYzWGxmWSdBOlVbwHjJIilbvSUS"
-
 _G.configuration = {
     behavior = {
         fps = 8, -- frame limit (lower results in less cpu usage but can affect cash being made)
@@ -36,17 +34,15 @@ _G.configuration = {
         leaveinterval = 0, -- leaves after (seconds) (leave on 0 if you want it to be disabled)
         onjoined = true, -- leaves if a player with the same id in joinedids joins
         joinedids = {
-            7133051682, 7133058597, 7133016800, 7133034913, 7133070744,
-            7133046202, 7133022355, 7133024337, 7133092117, 7133088571,
-            7133054070, 7133014919, 7133035878, 7133051286, 7133045186,
-            7133044299, 7133035490, 7133048737, 7133056527, 7133077704,
-            7133089125, 7133018703, 7133040645, 7133055096, 7133041078,
+            7133051682, 7133058597, 7133016800, 7133034913, 7133070744, 
+            7133046202, 7133022355, 7133024337, 7133092117, 7133088571, 
+            7133054070, 7133014919, 7133035878, 7133051286, 7133045186, 
+            7133044299, 7133035490, 7133048737, 7133056527, 7133077704, 
+            7133089125, 7133018703, 7133040645, 7133055096, 7133041078, 
             7133075967, 7133067404, 7133050081, 7133050146, 7133058004
         },
-        onloaded = false, -- leaves if an account with the same id in loadedids is already in the server
-        loadedids = {
-
-        },
+        onloaded = false, -- leaves if a account with the same id in loadedids is already in the server
+        loadedids = {},
     },
     webhook = {
         link = "https://discord.com/api/webhooks/1226990588721758240/h6xZqIiMf7I60jCdOOimWwRR21BNwq3PTtRt8Ks5gLByaaBgwom6Gtal8WszxsfNFvjT", -- webhook link
@@ -54,4 +50,4 @@ _G.configuration = {
     },
 }
 
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/9c53b857c733320e64332c171f813e50.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/74e3b194eb560d1324b8b6df78755b5e.lua"))()
