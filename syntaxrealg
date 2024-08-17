@@ -1,53 +1,84 @@
-script_key="zvLFWFdFjLnyaymaMqYxfFTNThFBKvGV";
-_G.Config = {
-    ["host"] = 3311210222, -- HostID
-    ["fps"] = 3, -- Alts Fps Cap
+_G.configuration = {
+    host = { -- only usernames
 
-    ["options"] = {
-        ["prefix"] = "/", -- Prefix For Commands
-        ["Feedback"] = true, -- Feedback for commands drop, stop Etc.
-        ["Rendering"] = false, -- Set To True or False If Mem Leak.
-        ["Cashdel"] = false, -- Enable Cashdel Upon Executing
     },
-
-    ["Alts"] = { -- Alts UserID
-        3068220681,
-        3083889210,
-        3083891022,
-        3083892540,
-        3083894051,
-        3083895514,
-        3301167626,
-        3301171525,
-        3301172896,
-        3301175464,
-        3301176405,
-        3301177451,
-        3301178340,
-        3301179293,
-        3301180270,
-        3301181373,
-        3301182850,
-        3301184471,
-        3301185659,
-        3301187082,
-        3301188358,
-        3301189447,
-        3301191149,
-        3301192472,
-        3301195894,
-        3301197318,
-        3301198667,
-        3301200132,
-        7123295683,
-        7123302534,
-        7123302053,
-        7123300155,
-        7123304506,
-        7123294244,
-        7123304512,
-        7123303029,
+    prefix = "/", -- prefix for commands
+    framelimit = 8, -- frame limit
+    ui = true, -- places a ui on the screen displaying the accounts cash
+    setups = {
+        ['bank'] = 'https://raw.githubusercontent.com/polarsblade/setups/main/bank',
+        ['club'] = 'https://raw.githubusercontent.com/polarsblade/setups/main/club',
+        ['bank2'] = 'https://raw.githubusercontent.com/polarsblade/setups/main/bank2',
+        ['train'] = 'https://raw.githubusercontent.com/polarsblade/setups/main/train',
+    },
+    accounts = {
+        ids = { -- ids only
+            3068220681,
+            3083889210,
+            3083891022,
+            3083892540,
+            3083894051,
+            3083895514,
+            3301167626,
+            3301171525,
+            3301172896,
+            3301175464,
+            3301176405,
+            3301177451,
+            3301178340,
+            3301179293,
+            3301180270,
+            3301181373,
+            3301182850,
+            3301184471,
+            3301185659,
+            3301187082,
+            3301188358,
+            3301189447,
+            3301191149,
+            3301192472,
+            3301195894,
+            3301197318,
+            3301198667,
+            3301200132,
+            7123295683,
+            7123302534,
+            7123302053,
+            7123300155,
+            7123304506,
+            7123294244,
+            7123304512,
+            7123303029,
+        },
+        fillgaps = true, -- fills gap for missing accounts
+        advertise = "/polarsblade", -- advertise message
+        cdropcovertax = true, -- cover tax for cdrop
+        responses = { -- responses for commands
+            toggle = true, -- toggle
+            ["random"] = "randomize complete",
+            ["fps"] = "fps set",
+            ["redeemcode"] = "code redeemed",
+            ["drop"] = {
+                "drop enabled", -- drop when toggled on
+                "drop disabled" -- drop when toggled off
+            },
+            ["wallet"] = {
+                "wallet equipped", -- wallets when equipped
+                "wallet unequipped" -- wallets when unequipped
+            },
+            ["setup"] = "setup complete",
+            ["circle"] = "circle formation complete",
+            ["setposition"] = "position set",
+            ["cdrop"] = {
+                "dropping amount", -- cdrop when enabled
+                "ended drop", -- cdrop when disabled
+            },
+            ["line"] = "lined up",
+            ["unarrest"] = "unarrested",
+            ["block"] = "blocking",
+            ["unblock"] = "unblocking",
+        }
     }
 }
 
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/26420745dbfaf1a8796ce116b86fdfe4.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/dde85c6b67d51ecc1631be707f84d9e4.lua"))()
