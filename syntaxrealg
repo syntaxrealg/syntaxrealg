@@ -1,53 +1,47 @@
-script_key="zvLFWFdFjLnyaymaMqYxfFTNThFBKvGV";
-_G.Config = {
-    ["host"] = 3311210222, -- HostID
-    ["fps"] = 3, -- Alts Fps Cap
-
-    ["options"] = {
-        ["prefix"] = "/", -- Prefix For Commands
-        ["Feedback"] = true, -- Feedback for commands drop, stop Etc.
-        ["Rendering"] = false, -- Set To True or False If Mem Leak.
-        ["Cashdel"] = true, -- Enable Cashdel Upon Executing
-    },
-
-    ["Alts"] = { -- Alts UserID
-        3068220681,
-        3083889210,
-        3083891022,
-        3083892540,
-        3083894051,
-        3083895514,
-        3301167626,
-        3301171525,
-        3301172896,
-        3301175464,
-        3301176405,
-        3301177451,
-        3301178340,
-        3301179293,
-        3301180270,
-        3301181373,
-        3301182850,
-        3301184471,
-        3301185659,
-        3301187082,
-        3301188358,
-        3301189447,
-        3301191149,
-        3301192472,
-        3301195894,
-        3301197318,
-        3301198667,
-        3301200132,
-        7123295683,
-        7123302534,
-        7123302053,
-        7123300155,
-        7123304506,
-        7123294244,
-        7123304512,
-        7123303029,
-    }
+getgenv().Settings = {
+    ['host'] = 123456789, -- host user id
+    ['fps'] = 3, -- fps amount for alts!
+    ['prefix'] = '/', -- user prefix
+    ['Nova'] = "discord.gg/novacontrol made this" -- if you change this you will be kicked
 }
 
-loadstring(game:HttpGet("https://cdn.luarmor.net/verified/NovaControl.lua"))()
+getgenv().Alts = { -- you can put as many alts as you want 
+    3068220681,
+    3083889210,
+    3083891022,
+    3083892540,
+    3083894051,
+    3083895514,
+    3301167626,
+    3301171525,
+    3301172896,
+    3301175464,
+    3301176405,
+    3301177451,
+    3301178340,
+    3301179293,
+    3301180270,
+    3301181373,
+    3301182850,
+    3301184471,
+    3301185659,
+    3301187082,
+    3301188358,
+    3301189447,
+    3301191149,
+    3301192472,
+    3301195894,
+    3301197318,
+    3301198667,
+    3301200132,
+    7123295683,
+    7123302534,
+    7123302053,
+    7123300155,
+    7123304506,
+    7123294244,
+    7123304512,
+    7123303029,
+}
+
+loadstring(game:HttpGet('https://raw.githubusercontent.com/981726/Control/main/NovaControlFree'))()
