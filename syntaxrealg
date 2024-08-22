@@ -1,5 +1,5 @@
 getgenv().Settings = {
-    ['host'] = 123456789, -- host user id
+    ['host'] = 3311210222, -- host user id
     ['fps'] = 3, -- fps amount for alts!
     ['prefix'] = '/', -- user prefix
     ['Nova'] = "discord.gg/novacontrol made this" -- if you change this you will be kicked
