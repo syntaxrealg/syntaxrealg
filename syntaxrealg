@@ -50,4 +50,4 @@ _G.Config = {
     }
 }
 
-loadstring(game:HttpGet("https://cdn.luarmor.net/verified/NovaControl.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/26420745dbfaf1a8796ce116b86fdfe4.lua"))()
