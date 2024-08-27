@@ -1,6 +1,6 @@
 _G.configuration = {
     host = { -- only usernames
-        "Q5U00", -- added username 
+        "Q5U00"
     },
     prefix = "/", -- prefix for commands
     framelimit = 8, -- frame limit
@@ -51,7 +51,7 @@ _G.configuration = {
             7123303029,
         },
         fillgaps = true, -- fills gap for missing accounts
-        advertise = "SYNDHC on top! dont forget 2 vouch :)", -- advertise message
+        advertise = "/polarsblade", -- advertise message
         cdropcovertax = true, -- cover tax for cdrop
         responses = { -- responses for commands
             toggle = true, -- toggle
@@ -71,7 +71,7 @@ _G.configuration = {
             ["setposition"] = "position set",
             ["cdrop"] = {
                 "dropping amount", -- cdrop when enabled
-                "We are done dropping, Boss.", -- cdrop when disabled
+                "ended drop", -- cdrop when disabled
             },
             ["line"] = "lined up",
             ["unarrest"] = "unarrested",
