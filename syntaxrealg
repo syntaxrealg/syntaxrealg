@@ -71,7 +71,7 @@ _G.configuration = {
             ["setposition"] = "position set",
             ["cdrop"] = {
                 "dropping amount", -- cdrop when enabled
-                "ended drop", -- cdrop when disabled
+                "We finished dropping, papi Syntax.", -- cdrop when disabled
             },
             ["line"] = "lined up",
             ["unarrest"] = "unarrested",
