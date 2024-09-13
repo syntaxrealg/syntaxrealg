@@ -400,9 +400,13 @@ for i, userId in ipairs(altAccountUserIds) do
     if altPlayer then
         sendChatMessage("Alt account " .. i .. " successfully setup, waiting for orders.")
         task.defer(function()
+            print("should tp")
+            print(positions[i])
             while true do task.wait()
                 game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = positions[i]
-            end)
+                game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
+            end
+        end)
     end
 end
 
