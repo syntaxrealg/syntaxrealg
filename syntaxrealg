@@ -1,55 +1,415 @@
-_G.configuration = {
-    behavior = {
-        fps = 8, -- frame limit (lower results in less cpu usage but can affect cash being made)
-        rendering = true, -- disables / enables rendering (true by default because of memory leaks)
-        optimize = true, -- helps lower usage overall
-        gui = true, -- cool gui with stats
-    },
-    cash = {
-        pickup = 0.7, -- pickup delay
-        distancepickup = 0.25, -- pickup delay + this when cash is too far (prevents kicking)
-    },
-    farming = {
-        shoe = true, -- farms shoes
-        hospital = true, -- farms hospital
-        spawnedcash = {
-            toggle = true, -- farms dropped cash / spawned cash
-            tweenspeed = 1, -- speed of teleport
-            finishdelay = 1, -- speed of pickup
-        },
-    },
-    weapon = {
-        defaultmoveset = false, -- farms using default moveset
-        boxingmoveset = true, -- farms using boxing moveset (farms boxing if it doesnt already have it)
-    },
-    other = {
-        mask = false, -- automatically masks the account
-        unjail = true, -- automatically unjails the account
-    },
-    serverhop = {
-        switch = true, -- force toggle for serverhopping
-        cashthreshold = 550000, -- cash threshold (serverhops if it doesnt reach this within a hour of farming) || set to false if you want this disabled
-        onnoatms = false, -- leaves when there are no more atms to farm (shoe and hospital become ineffective)
-        onknocked = false, -- leaves if the account gets knocked
-        leaveinterval = 0, -- leaves after (seconds) (leave on 0 if you want it to be disabled)
-        onjoined = true, -- leaves if a player with the same id in joinedids joins
-        joinedids = {
-            3068220681, 3083889210, 3083891022, 3083892540, 3083894051, 
-            3083895514, 3301167626, 3301171525, 3301172896, 3301175464, 
-            3301176405, 3301177451, 3301178340, 3301179293, 3301180270, 
-            3301181373, 3301182850, 3301184471, 3301185659, 3301187082, 
-            3301188358, 3301189447, 3301191149, 3301192472, 3301195894,
-            3301197318, 3301198667, 3301200132,
-            7123295683, 7123302534, 7123302053, 7123300155, 7123304506,
-            7123294244, 7123304512, 7123303029
-        },
-        onloaded = false, -- leaves if a account with the same id in loadedids is already in the server
-        loadedids = {},
-    },
-    webhook = {
-        link = "https://discord.com/api/webhooks/1226990588721758240/h6xZqIiMf7I60jCdOOimWwRR21BNwq3PTtRt8Ks5gLByaaBgwom6Gtal8WszxsfNFvjT", -- webhook link
-        interval = 900, -- sends webhook after (seconds) passes
-    },
+local httpService = game:GetService("HttpService")
+local proxyUrl = "http://bot-service-asia-se-02.cybrancee.com:5050/get-data" -- Replace with your server URL
+local deleteUrl = "http://bot-service-asia-se-02.cybrancee.com:5050/delete-user" -- Replace with your server URL
+local updateMoneyDropUrl = "http://bot-service-asia-se-02.cybrancee.com:5050/update-currentmoneydrop" -- New endpoint URL
+
+local MainEvent = game.ReplicatedStorage:WaitForChild("MainEvent")  -- Adjust path to your RemoteEvent
+local dropAmount = 10000
+local netAmount = 8500  -- Net amount after tax
+local cooldown = 16  -- Cooldown in seconds
+local render = false 
+local fps = 5 
+
+-- Anti-AFK function to prevent idle kick
+local bb = game:GetService('VirtualUser')
+game:GetService('Players').LocalPlayer.Idled:connect(function()
+    bb:CaptureController()
+    bb:ClickButton2(Vector2.new())
+end)
+
+if fps then 
+    setfpscap(fps)
+end 
+
+game:GetService("RunService"):Set3dRenderingEnabled(render)
+
+
+
+-- List of alt account user IDs
+local altAccountUserIds = {
+    3068220681,
+    3083889210,
+    3083891022,
+    3083892540,
+    3083894051,
+    3083895514,
+    3301167626,
+    3301171525,
+    3301172896,
+    3301175464,
+    3301176405,
+    3301177451,
+    3301178340,
+    3301179293,
+    3301180270,
+    3301181373,
+    3301182850,
+    3301184471,
+    3301185659,
+    3301187082,
+    3301188358,
+    3301189447,
+    3301191149,
+    3301192472,
+    3301195894,
+    3301197318,
+    3301198667,
+    3301200132,
+    7123295683,
+    7123302534,
+    7123302053,
+    7123300155,
+    7123304506,
+    7123294244,
+    7123304512,
+    7123303029,
+    2653005009
 }
 
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/74e3b194eb560d1324b8b6df78755b5e.lua"))()
+local positions = {
+    CFrame.new(-386.892548, 21.2513771, -334.174438, 0.999419928, 3.55445557e-08, 0.0340558439, -3.56654652e-08, 1, 2.94281532e-09, -0.0340558439, -4.15572554e-09, 0.999419928),
+    CFrame.new(-374.227631, 21.2513809, -335.273926, 0.999948323, 5.9703531e-08, 0.0101633593, -5.94947309e-08, 1, -2.08466489e-08, -0.0101633593, 2.02409058e-08, 0.999948323),
+   CFrame.new(-364.844177, 21.2513809, -335.362152, 0.999823928, -9.61066675e-08, -0.0187652353, 9.66306999e-08, 1, 2.70190039e-08, 0.0187652353, -2.8827543e-08, 0.999823928),
+   CFrame.new(-364.033447, 21.2513809, -326.001312, 0.999508977, -4.11974632e-08, -0.0313342363, 4.12107113e-08, 1, -2.23009888e-10, 0.0313342363, -1.0684057e-09, 0.999508977),
+   CFrame.new(-376.141937, 21.2513809, -327.193298, 0.999950349, 9.26659283e-09, -0.00996471941, -9.55284651e-09, 1, -2.86790875e-08, 0.00996471941, 2.87728543e-08, 0.999950349),
+ CFrame.new(-387.473877, 21.2513809, -327.815552, 0.999970853, -2.64506834e-08, 0.00763489679, 2.57988351e-08, 1, 8.54758824e-08, -0.00763489679, -8.52764188e-08, 0.999970853),
+  CFrame.new(-387.431061, 21.2513809, -322.223602, 0.999970853, -1.93364933e-08, 0.00763489679, 1.88613161e-08, 1, 6.23094891e-08, -0.00763489679, -6.21636715e-08, 0.999970853),
+  CFrame.new(-375.003784, 21.2513809, -321.186615, 0.999193907, -1.84690077e-08, -0.0401438065, 2.06946282e-08, 1, 5.50256729e-08, 0.0401438065, -5.58120767e-08, 0.999193907),
+   CFrame.new(-364.563416, 21.2513809, -321.091827, 0.999193907, 3.22680407e-08, -0.0401441343, -3.56458258e-08, 1, -8.34256824e-08, 0.0401441343, 8.47894057e-08, 0.999193907),
+   CFrame.new(-364.081482, 21.2513809, -312.391876, 0.999999344, 1.60705866e-08, -0.00116705929, -1.6183229e-08, 1, -9.65096518e-08, 0.00116705929, 9.65284741e-08, 0.999999344),
+   CFrame.new(-374.070343, 21.2513809, -312.654755, 0.999653757, 1.68246732e-08, -0.0263131242, -1.93105194e-08, 1, -9.42176612e-08, 0.0263131242, 9.46931564e-08, 0.999653757),
+  CFrame.new(-386.161224, 21.2513809, -313.102417, 0.999194205, -7.37470307e-09, -0.0401369631, 8.94851837e-09, 1, 3.9031459e-08, 0.0401369631, -3.93591755e-08, 0.999194205),
+    CFrame.new(-386.061066, 21.2513809, -304.304657, 0.996770144, -2.97057774e-08, -0.0803077146, 3.68070268e-08, 1, 8.69451569e-08, 0.0803077146, -8.96202224e-08, 0.996770144),
+   CFrame.new(-374.89859, 21.2513809, -303.704865, 0.993178725, -6.45774056e-09, -0.116602108, 9.15526677e-09, 1, 2.25988668e-08, 0.116602108, -2.35122375e-08, 0.993178725),
+   CFrame.new(-362.53009, 21.2513771, -302.932495, 0.9987396, -1.85988682e-08, -0.0501915291, 2.15424691e-08, 1, 5.81063766e-08, 0.0501915291, -5.91143881e-08, 0.9987396),
+    CFrame.new(-361.422791, 21.2513771, -293.364563, 0.997161269, -2.03779074e-08, -0.0752957389, 2.57855977e-08, 1, 7.08471859e-08, 0.0752957389, -7.25876177e-08, 0.997161269),
+ CFrame.new(-374.957886, 21.2513771, -294.293121, 0.996135712, 1.00378958e-08, -0.0878273845, -1.28651187e-08, 1, -3.16246265e-08, 0.0878273845, 3.26323288e-08, 0.996135712),
+   CFrame.new(-385.08194, 21.2513771, -295.356537, 0.999243677, 2.78384427e-09, -0.0388846733, -3.01288838e-09, 1, -5.83174087e-09, 0.0388846733, 5.94448579e-09, 0.999243677),
+   CFrame.new(-385.242493, 21.2513771, -286.742645, 0.998675704, -4.32342695e-08, -0.0514473803, 4.78680349e-08, 1, 8.88358827e-08, 0.0514473803, -9.11809224e-08, 0.998675704),
+   CFrame.new(-374.898773, 21.2513771, -286.184509, 0.99646008, 8.39501624e-09, -0.084067367, -9.96233052e-09, 1, -1.82240534e-08, 0.084067367, 1.89970475e-08, 0.99646008),
+CFrame.new(-364.293671, 21.2513771, -285.477936, 0.999905586, -5.21981995e-08, -0.0137404753, 5.3683479e-08, 1, 1.07726315e-07, 0.0137404753, -1.08453776e-07, 0.999905586),
+    CFrame.new(-364.461365, 21.2513771, -273.197418, 0.999922097, -4.2479873e-09, -0.0124830846, 4.35782743e-09, 1, 8.77192363e-09, 0.0124830846, -8.82563889e-09, 0.999922097),
+    CFrame.new(-362.899841, 21.2513771, -268.28656, 0.999142766, -4.2525155e-08, -0.0413973257, 4.54266846e-08, 1, 6.91491167e-08, 0.0413973257, -7.09703798e-08, 0.999142766),
+  CFrame.new(-374.533203, 21.2513771, -267.583771, 0.994167447, 5.2043422e-08, -0.10784737, -5.71630316e-08, 1, -4.43794193e-08, 0.10784737, 5.02854576e-08, 0.994167447),
+   CFrame.new(-385.39859, 21.2513771, -268.762634, 0.994167447, 3.02712522e-08, -0.10784737, -3.32492611e-08, 1, -2.58150408e-08, 0.10784737, 2.92503195e-08, 0.994167447),
+  CFrame.new(-386.857208, 21.2513771, -259.322571, 0.998404503, 1.35107858e-09, -0.0564663038, -5.03777553e-09, 1, -6.51478729e-08, 0.0564663038, 6.53283934e-08, 0.998404503),
+    CFrame.new(-373.037354, 21.2513771, -258.539276, 0.998404503, 8.33554892e-10, -0.0564663038, -2.99752978e-09, 1, -3.82385998e-08, 0.0564663038, 3.8346851e-08, 0.998404503),
+  CFrame.new(-363.087769, 21.2513809, -262.915527, 0.991306901, 1.07235765e-09, -0.131570026, -5.27510613e-09, 1, -3.15945172e-08, 0.131570026, 3.2013908e-08, 0.991306901),
+    CFrame.new(-362.795654, 21.2513809, -252.18158, 0.997869015, -1.2432505e-09, -0.0652488247, 2.46107623e-09, 1, 1.85839539e-08, 0.0652488247, -1.87049345e-08, 0.997869015),
+    CFrame.new(-362.213989, 21.2513809, -245.006897, 0.999426961, -1.55657851e-08, -0.0338484757, 1.88329583e-08, 1, 9.6204694e-08, 0.0338484757, -9.67870335e-08, 0.999426961),
+    CFrame.new(-362.981262, 21.251379, -235.134293, 0.999584556, -6.94510627e-09, -0.0288213845, 1.06686846e-08, 1, 1.29041211e-07, 0.0288213845, -1.29295088e-07, 0.999584556),
+    CFrame.new(-373.79184, 21.251379, -235.529297, 0.999292076, 4.59377469e-09, -0.0376203284, -8.14550738e-09, 1, -9.42566558e-08, 0.0376203284, 9.44963716e-08, 0.999292076),
+    CFrame.new(-386.838959, 21.2513771, -234.517639, 0.998543561, 2.57806609e-10, -0.053950917, 2.99297698e-10, 1, 1.03180522e-08, 0.053950917, -1.03191722e-08, 0.998543561),
+ CFrame.new(-387.41861, 21.2513771, -223.786423, 0.998332977, 8.67127828e-11, -0.0577175468, 7.83671322e-11, 1, 2.85787061e-09, 0.0577175468, -2.85762947e-09, 0.998332977),
+   CFrame.new(-373.730469, 21.2513771, -223.041199, 0.998922348, -3.07450421e-08, -0.0464123525, 2.67384515e-08, 1, -8.69467556e-08, 0.0464123525, 8.5612065e-08, 0.998922348),
+  CFrame.new(-362.090973, 21.2513771, -220.344162, 0.99954766, 1.96742072e-08, -0.0300748777, -1.80254762e-08, 1, 5.50920305e-08, 0.0300748777, -5.45249961e-08, 0.99954766),
+   CFrame.new(-362.3237, 21.2513771, -212.584305, 0.99954766, -2.85690671e-08, -0.0300744902, 2.61659761e-08, 1, -8.02982001e-08, 0.0300744902, 7.9474944e-08, 0.99954766),
+   CFrame.new(-373.580292, 21.2513771, -206.692413, 0.99954766, 9.49108703e-09, -0.0300744902, -8.6929095e-09, 1, 2.66707776e-08, 0.0300744902, -2.6397279e-08, 0.99954766),
+  CFrame.new(-385.612701, 21.2513809, -207.051682, 0.99954766, 2.47458587e-09, -0.0300744902, -3.07388093e-09, 1, -1.98807921e-08, 0.0300744902, 1.99642454e-08, 0.99954766)
+
+}
+
+
+
+-- Base position for teleportation
+local baseCFrame = CFrame.new(-389.909851, 21.2499924, -325.149384)
+local offset = Vector3.new(16, 0, 0) -- Offset for each additional account
+
+
+-- Initialize TextChatService
+local textChatService = game:GetService("TextChatService")
+
+-- Function to send a chat message
+local messageSent = false
+
+local function sendChatMessage(message)
+    if not messageSent then
+        -- Get the player's character
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+
+        -- Use the Chat service to send a message
+      ---  game:GetService("Chat"):Chat(character.Head, message, Enum.ChatColor.Blue)
+        game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(tostring(message),"All")
+
+        
+        
+        -- Set the flag to true to indicate that the message has been sent
+        messageSent = true
+    end
+end
+
+-- Function to convert amount string to number
+local function convertAmount(amountStr)
+    local amount = tonumber(amountStr:sub(1, -2))
+    local unit = amountStr:sub(-1):upper()
+    if unit == "M" then
+        return amount * 1e6
+    elseif unit == "K" then
+        return amount * 1e3
+    else
+        return amount
+    end
+end
+
+-- Function to fetch data from the server
+local function fetchData()
+    local response = request({
+        Url = proxyUrl,
+        Method = "GET",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        }
+    })
+    
+    if response.StatusCode == 200 then
+        local data = httpService:JSONDecode(response.Body)
+        return data
+    else
+        error("Failed to fetch data: " .. response.StatusCode .. " " .. response.StatusMessage)
+    end
+end
+
+-- Function to delete user data from the server
+local function deleteUser(username)
+    local headers = {
+        ["Content-Type"] = "application/json"
+    }
+    local data = {
+        ["username"] = username
+    }
+    local body = httpService:JSONEncode(data)
+    local response = request({
+        Url = deleteUrl,
+        Method = "POST",
+        Headers = headers,
+        Body = body
+    })
+    
+    if response.StatusCode == 200 then
+        print("Delete successful:", response.Body)
+    else
+        print("Request failed:", response.StatusCode, response.StatusMessage)
+    end
+end
+
+-- Function to update currentmoneydrop field in the server
+local function updateCurrentMoneyDrop(username, incrementAmount)
+    local headers = {
+        ["Content-Type"] = "application/json"
+    }
+    local data = {
+        ["username"] = username,
+        ["incrementAmount"] = incrementAmount
+    }
+    local body = httpService:JSONEncode(data)
+    
+    -- Debugging: Print the URL and request details
+    print("Incrementing current money drop for user:", username)
+    print("URL:", updateMoneyDropUrl)
+    print("Request Body:", body)
+    
+    local success, response = pcall(function()
+        return request({
+            Url = updateMoneyDropUrl,
+            Method = "POST",
+            Headers = headers,
+            Body = body
+        })
+    end)
+    
+    if success then
+        if response.StatusCode == 200 then
+            print("Increment currentmoneydrop successful:", response.Body)
+        else
+            print("Request failed with status code:", response.StatusCode)
+            print("Response:", response.Body)
+        end
+    else
+        print("Request failed with error:", response)
+    end
+end
+
+-- Function to make MoneyDrop and its descendants invisible
+local function makeMoneyDropInvisible(moneyDrop)
+    if moneyDrop:IsA("BasePart") then
+        moneyDrop.Transparency = 1
+        moneyDrop.CanCollide = false
+    end
+
+    for _, descendant in pairs(moneyDrop:GetDescendants()) do
+        if descendant:IsA("Decal") or descendant:IsA("Texture") then
+            descendant.Transparency = 1
+        elseif descendant:IsA("TextLabel") then
+            descendant.Visible = false
+        end
+    end
+end
+
+-- Get the Drop folder from Workspace.Ignored
+local dropFolder = workspace:WaitForChild("Ignored"):WaitForChild("Drop")
+
+-- Iterate through all parts in the Drop folder and make MoneyDrop parts invisible
+for _, item in pairs(dropFolder:GetChildren()) do
+    if item.Name == "MoneyDrop" then
+        makeMoneyDropInvisible(item)
+    end
+end
+
+-- Function to calculate the number of drops needed per account
+local function calculateDropsPerAccount(totalTargetAmount, numAccounts, dropAmount, netAmount)
+    local taxRate = 1 - (netAmount / dropAmount)
+    local grossAmountPerAccount = (totalTargetAmount / numAccounts) / (1 - taxRate)
+    local dropsPerAccount = grossAmountPerAccount / dropAmount
+    
+    -- Round to the nearest whole number, rounding up if the decimal part is 0.2 or higher
+    if dropsPerAccount % 1 >= 0.2 then
+        dropsPerAccount = math.ceil(dropsPerAccount)
+    else
+        dropsPerAccount = math.floor(dropsPerAccount)
+    end
+    
+    return dropsPerAccount
+end
+
+local function dropMoney(totalTargetAmount, numAccounts, targetUsername)
+    -- Calculate the target amount per account
+    local targetAmountPerAccount = totalTargetAmount / numAccounts
+    local dropsPerAccount = calculateDropsPerAccount(targetAmountPerAccount, numAccounts, dropAmount, netAmount)
+    local totalDropped = 0
+    local totalDrops = dropsPerAccount * numAccounts
+    
+    for i = 1, totalDrops do
+        -- Drop money
+        MainEvent:FireServer("DropMoney", dropAmount)
+        totalDropped = totalDropped + dropAmount
+        
+        print("Dropped", totalDropped, "money. Target per account is", targetAmountPerAccount)
+        
+        -- Update currentmoneydrop in the server
+        updateCurrentMoneyDrop(targetUsername, totalDropped)
+        
+        -- Send a chat message after each drop
+        sendChatMessage("Dropped " .. totalDropped .. " money. Target per account is " .. targetAmountPerAccount)
+        
+        -- Wait for the cooldown before the next drop
+        wait(cooldown)
+        
+        -- Make all MoneyDrop parts invisible
+        for _, item in pairs(dropFolder:GetChildren()) do
+            if item.Name == "MoneyDrop" then
+                makeMoneyDropInvisible(item)
+            end
+        end
+        
+        -- Reset the messageSent flag for the next drop
+        messageSent = false
+    end
+    
+    print("Reached target amount of", totalTargetAmount, "money.")
+end
+
+-- Function to start money dropping and send a chat message when the target user joins
+local function onTargetUserJoined(player, targetUsername, totalTargetAmount)
+    print("Checking if player is target user:", player.Name, targetUsername)
+    if player.Name == targetUsername or player.DisplayName == targetUsername then
+        print("Target user joined. Starting money drop...")
+        
+        -- Send a chat message
+        sendChatMessage("User has joined: starting dropping order amount: " .. totalTargetAmount)
+
+        dropMoney(totalTargetAmount, #altAccountUserIds + 1, targetUsername)
+        
+        -- Delete user data after dropping money
+        deleteUser(targetUsername)
+    end
+end
+
+-- Function to teleport the player to a specific CFrame
+local function teleportPlayer(player, cframe)
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    
+    humanoidRootPart.CFrame = cframe
+end
+
+-- Function to set up event listeners for each target user
+local function setupEventListeners(data)
+    for _, entry in ipairs(data) do
+        local targetUsername = entry.username
+        local totalTargetAmount = convertAmount(entry.amount)
+        print("Setting up listener for user:", targetUsername, "with amount:", totalTargetAmount)
+        
+        -- Listen for players joining and check if they are the target user
+        game.Players.PlayerAdded:Connect(function(player)
+            print("Player joined:", player.Name)
+            onTargetUserJoined(player, targetUsername, totalTargetAmount)
+        end)
+    end
+end
+
+-- Function to make all parts in the workspace invisible
+local function makeWorkspaceInvisible()
+    for _, descendant in pairs(workspace:GetDescendants()) do
+        if descendant:IsA("BasePart") then
+            descendant.Transparency = 1
+            descendant.CanCollide = false
+        elseif descendant:IsA("Decal") or descendant:IsA("Texture") then
+            descendant.Transparency = 1
+        elseif descendant:IsA("TextLabel") then
+            descendant.Visible = false
+        end
+    end
+end
+
+-- Function to create a floating platform at a specified CFrame
+local function createFloatingPlatformAtCFrame(cframePosition)
+    -- Create the platform part
+    local platform = Instance.new("Part")
+    platform.Size = Vector3.new(400, 1, 40)  -- Adjust size as needed
+    platform.Anchored = true
+    platform.CanCollide = true
+    platform.Transparency = 0.5  -- Adjust transparency as needed
+    platform.BrickColor = BrickColor.new("Bright blue")  -- Adjust color as needed
+    platform.Name = "FloatingPlatform"
+    
+
+    -- Position the platform at the specified CFrame
+    platform.CFrame = cframePosition
+
+    -- Parent the platform to the workspace
+    platform.Parent = workspace
+end
+
+-- Example CFrame position, adjust as needed
+local cframePosition = CFrame.new(-375, 12, -350.124939, 0, 0, 1, 0, 1, -0, -1, 0, 0)
+
+-- Make the workspace invisible
+makeWorkspaceInvisible()
+
+-- Create the floating platform immediately when the script is executed
+createFloatingPlatformAtCFrame(cframePosition)
+
+-- Teleport the main account and alt accounts
+local player = game.Players.LocalPlayer
+teleportPlayer(player, baseCFrame)
+sendChatMessage("Successfully setup, waiting for orders.")
+
+for i, userId in ipairs(altAccountUserIds) do
+    local altPlayer = game.Players:GetPlayerByUserId(userId)
+    if altPlayer then
+        sendChatMessage("Alt account " .. i .. " successfully setup, waiting for orders.")
+        task.defer(function()
+            while true do task.wait()
+                game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = positions[i]
+            end)
+    end
+end
+
+-- Keep fetching data every 5 seconds to check for new buyers
+while true do
+    local data = fetchData()
+    print("Fetched data:", data)
+    setupEventListeners(data)
+    wait(5)  -- Fetch data every 5 seconds
+end
