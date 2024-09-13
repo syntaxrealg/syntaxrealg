@@ -396,7 +396,7 @@ teleportPlayer(player, baseCFrame)
 sendChatMessage("Successfully setup, waiting for orders.")
 
 for i, userId in pairs(altAccountUserIds) do
-    if userId = game.Players.LocalPlayer.UserId then 
+    if userId == game.Players.LocalPlayer.UserId then 
         sendChatMessage("Alt account " .. i .. " successfully setup, waiting for orders.")
         task.defer(function()
             print("should tp")
