@@ -1,415 +1,55 @@
-local httpService = game:GetService("HttpService")
-local proxyUrl = "http://bot-service-asia-se-02.cybrancee.com:5050/get-data" -- Replace with your server URL
-local deleteUrl = "http://bot-service-asia-se-02.cybrancee.com:5050/delete-user" -- Replace with your server URL
-local updateMoneyDropUrl = "http://bot-service-asia-se-02.cybrancee.com:5050/update-currentmoneydrop" -- New endpoint URL
-
-local MainEvent = game.ReplicatedStorage:WaitForChild("MainEvent")  -- Adjust path to your RemoteEvent
-local dropAmount = 10000
-local netAmount = 8500  -- Net amount after tax
-local cooldown = 16  -- Cooldown in seconds
-local render = false 
-local fps = 5 
-
--- Anti-AFK function to prevent idle kick
-local bb = game:GetService('VirtualUser')
-game:GetService('Players').LocalPlayer.Idled:connect(function()
-    bb:CaptureController()
-    bb:ClickButton2(Vector2.new())
-end)
-
-if fps then 
-    setfpscap(fps)
-end 
-
-game:GetService("RunService"):Set3dRenderingEnabled(render)
-
-
-
--- List of alt account user IDs
-local altAccountUserIds = {
-    3068220681,
-    3083889210,
-    3083891022,
-    3083892540,
-    3083894051,
-    3083895514,
-    3301167626,
-    3301171525,
-    3301172896,
-    3301175464,
-    3301176405,
-    3301177451,
-    3301178340,
-    3301179293,
-    3301180270,
-    3301181373,
-    3301182850,
-    3301184471,
-    3301185659,
-    3301187082,
-    3301188358,
-    3301189447,
-    3301191149,
-    3301192472,
-    3301195894,
-    3301197318,
-    3301198667,
-    3301200132,
-    7123295683,
-    7123302534,
-    7123302053,
-    7123300155,
-    7123304506,
-    7123294244,
-    7123304512,
-    7123303029,
-    2653005009
+_G.configuration = {
+    behavior = {
+        fps = 8, -- frame limit (lower results in less cpu usage but can affect cash being made)
+        rendering = true, -- disables / enables rendering (true by default because of memory leaks)
+        optimize = true, -- helps lower usage overall
+        gui = true, -- cool gui with stats
+    },
+    cash = {
+        pickup = 0.7, -- pickup delay
+        distancepickup = 0.25, -- pickup delay + this when cash is too far (prevents kicking)
+    },
+    farming = {
+        shoe = true, -- farms shoes
+        hospital = true, -- farms hospital
+        spawnedcash = {
+            toggle = true, -- farms dropped cash / spawned cash
+            tweenspeed = 1, -- speed of teleport
+            finishdelay = 1, -- speed of pickup
+        },
+    },
+    weapon = {
+        defaultmoveset = false, -- farms using default moveset
+        boxingmoveset = true, -- farms using boxing moveset (farms boxing if it doesnt already have it)
+    },
+    other = {
+        mask = false, -- automatically masks the account
+        unjail = true, -- automatically unjails the account
+    },
+    serverhop = {
+        switch = true, -- force toggle for serverhopping
+        cashthreshold = 550000, -- cash threshold (serverhops if it doesnt reach this within a hour of farming) || set to false if you want this disabled
+        onnoatms = false, -- leaves when there are no more atms to farm (shoe and hospital become ineffective)
+        onknocked = false, -- leaves if the account gets knocked
+        leaveinterval = 0, -- leaves after (seconds) (leave on 0 if you want it to be disabled)
+        onjoined = true, -- leaves if a player with the same id in joinedids joins
+        joinedids = {
+            3068220681, 3083889210, 3083891022, 3083892540, 3083894051, 
+            3083895514, 3301167626, 3301171525, 3301172896, 3301175464, 
+            3301176405, 3301177451, 3301178340, 3301179293, 3301180270, 
+            3301181373, 3301182850, 3301184471, 3301185659, 3301187082, 
+            3301188358, 3301189447, 3301191149, 3301192472, 3301195894,
+            3301197318, 3301198667, 3301200132,
+            7123295683, 7123302534, 7123302053, 7123300155, 7123304506,
+            7123294244, 7123304512, 7123303029
+        },
+        onloaded = false, -- leaves if a account with the same id in loadedids is already in the server
+        loadedids = {},
+    },
+    webhook = {
+        link = "https://discord.com/api/webhooks/1226990588721758240/h6xZqIiMf7I60jCdOOimWwRR21BNwq3PTtRt8Ks5gLByaaBgwom6Gtal8WszxsfNFvjT", -- webhook link
+        interval = 900, -- sends webhook after (seconds) passes
+    },
 }
 
-local positions = {
-    CFrame.new(-235.669189453125,-13,-407.76593017578125), --1
-    CFrame.new(-247.2197723388672,-13,-406.1216735839844), --2
-   CFrame.new(-258.72015380859375,-13,-406.4718017578125), --3
-   CFrame.new(-270.209228515625,-13,-406.51483154296875), --etc
-   CFrame.new(-282.2398986816406,-13,-405.5449523925781),
- CFrame.new(-292.9043273925781,-13,-406.48773193359375),
-  CFrame.new(-293.91925048828125,-13,-393.7784118652344),
-  CFrame.new(-282.1358947753906,-13,-394.2042236328125),
-   CFrame.new(-270.5511779785156,-13,-392.6865539550781),
-   CFrame.new(-258.5094909667969,-13,-394.9905700683594),
-   CFrame.new(-246.91290283203125,-13,-395.1442565917969),
-  CFrame.new(-234.92691040039062,-13,-394.23797607421875),
-    CFrame.new(-234.9790802001953,-13,-383.3056335449219),
-   CFrame.new(-246.68809509277344,-13,-383.1556091308594),
-   CFrame.new(-258.5528259277344,-13,-382.6687316894531),
-    CFrame.new(-270.5811767578125,-13,-383.9425354003906),
- CFrame.new(-282.2737731933594,-13,-382.54937744140625),
-   CFrame.new(-293.820068359375,-13,-382.2751770019531),
-   CFrame.new(-294.29571533203125,-13,-371.32568359375),
-   CFrame.new(-282.3605651855469,-13,-371.54974365234375),
-CFrame.new(-270.668212890625,-13,-370.8940124511719),
-    CFrame.new(-258.4621276855469,-13,-371.8905334472656),
-    CFrame.new(-246.62075805664062,-13,-371.6852111816406),
-  CFrame.new(-235.40252685546875,-13,-371.12811279296875),
-   CFrame.new(-234.9969940185547,-13,-360.1986083984375),
-  CFrame.new(-247.05299377441406,-13,-358.7730407714844),
-    CFrame.new(-258.6451110839844,-13,-359.1872863769531),
-  CFrame.new(-270.6800842285156,-13,-360.0216369628906),
-    CFrame.new(-282.3435363769531,-13,-359.3739318847656),
-    CFrame.new(-294.2984313964844,-13,-359.17315673828125),
-    CFrame.new(-294.266845703125,-13,-347.902099609375),
-    CFrame.new(-282.10797119140625,-13,-347.9654846191406),
-    CFrame.new(-270.7996826171875,-13,-347.84527587890625),
- CFrame.new(-258.8222351074219,-13,-348.4723205566406),
-   CFrame.new(-247.0612335205078,-13,-347.6903381347656),
-  CFrame.new(-234.9398956298828,-13,-347.7189025878906),
-
-}
-
-
-
--- Base position for teleportation
-local baseCFrame = CFrame.new(-389.909851, 21.2499924, -325.149384)
-local offset = Vector3.new(16, 0, 0) -- Offset for each additional account
-
-
--- Initialize TextChatService
-local textChatService = game:GetService("TextChatService")
-
--- Function to send a chat message
-local messageSent = false
-
-local function sendChatMessage(message)
-    if not messageSent then
-        -- Get the player's character
-        local player = game.Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-
-        -- Use the Chat service to send a message
-      ---  game:GetService("Chat"):Chat(character.Head, message, Enum.ChatColor.Blue)
-        game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(tostring(message),"All")
-
-        
-        
-        -- Set the flag to true to indicate that the message has been sent
-        messageSent = true
-    end
-end
-
--- Function to convert amount string to number
-local function convertAmount(amountStr)
-    local amount = tonumber(amountStr:sub(1, -2))
-    local unit = amountStr:sub(-1):upper()
-    if unit == "M" then
-        return amount * 1e6
-    elseif unit == "K" then
-        return amount * 1e3
-    else
-        return amount
-    end
-end
-
--- Function to fetch data from the server
-local function fetchData()
-    local response = request({
-        Url = proxyUrl,
-        Method = "GET",
-        Headers = {
-            ["Content-Type"] = "application/json"
-        }
-    })
-    
-    if response.StatusCode == 200 then
-        local data = httpService:JSONDecode(response.Body)
-        return data
-    else
-        error("Failed to fetch data: " .. response.StatusCode .. " " .. response.StatusMessage)
-    end
-end
-
--- Function to delete user data from the server
-local function deleteUser(username)
-    local headers = {
-        ["Content-Type"] = "application/json"
-    }
-    local data = {
-        ["username"] = username
-    }
-    local body = httpService:JSONEncode(data)
-    local response = request({
-        Url = deleteUrl,
-        Method = "POST",
-        Headers = headers,
-        Body = body
-    })
-    
-    if response.StatusCode == 200 then
-        print("Delete successful:", response.Body)
-    else
-        print("Request failed:", response.StatusCode, response.StatusMessage)
-    end
-end
-
--- Function to update currentmoneydrop field in the server
-local function updateCurrentMoneyDrop(username, incrementAmount)
-    local headers = {
-        ["Content-Type"] = "application/json"
-    }
-    local data = {
-        ["username"] = username,
-        ["incrementAmount"] = incrementAmount
-    }
-    local body = httpService:JSONEncode(data)
-    
-    -- Debugging: Print the URL and request details
-    print("Incrementing current money drop for user:", username)
-    print("URL:", updateMoneyDropUrl)
-    print("Request Body:", body)
-    
-    local success, response = pcall(function()
-        return request({
-            Url = updateMoneyDropUrl,
-            Method = "POST",
-            Headers = headers,
-            Body = body
-        })
-    end)
-    
-    if success then
-        if response.StatusCode == 200 then
-            print("Increment currentmoneydrop successful:", response.Body)
-        else
-            print("Request failed with status code:", response.StatusCode)
-            print("Response:", response.Body)
-        end
-    else
-        print("Request failed with error:", response)
-    end
-end
-
--- Function to make MoneyDrop and its descendants invisible
-local function makeMoneyDropInvisible(moneyDrop)
-    if moneyDrop:IsA("BasePart") then
-        moneyDrop.Transparency = 1
-        moneyDrop.CanCollide = false
-    end
-
-    for _, descendant in pairs(moneyDrop:GetDescendants()) do
-        if descendant:IsA("Decal") or descendant:IsA("Texture") then
-            descendant.Transparency = 1
-        elseif descendant:IsA("TextLabel") then
-            descendant.Visible = false
-        end
-    end
-end
-
--- Get the Drop folder from Workspace.Ignored
-local dropFolder = workspace:WaitForChild("Ignored"):WaitForChild("Drop")
-
--- Iterate through all parts in the Drop folder and make MoneyDrop parts invisible
-for _, item in pairs(dropFolder:GetChildren()) do
-    if item.Name == "MoneyDrop" then
-        makeMoneyDropInvisible(item)
-    end
-end
-
--- Function to calculate the number of drops needed per account
-local function calculateDropsPerAccount(totalTargetAmount, numAccounts, dropAmount, netAmount)
-    local taxRate = 1 - (netAmount / dropAmount)
-    local grossAmountPerAccount = (totalTargetAmount / numAccounts) / (1 - taxRate)
-    local dropsPerAccount = grossAmountPerAccount / dropAmount
-    
-    -- Round to the nearest whole number, rounding up if the decimal part is 0.2 or higher
-    if dropsPerAccount % 1 >= 0.2 then
-        dropsPerAccount = math.ceil(dropsPerAccount)
-    else
-        dropsPerAccount = math.floor(dropsPerAccount)
-    end
-    
-    return dropsPerAccount
-end
-
-local function dropMoney(totalTargetAmount, numAccounts, targetUsername)
-    -- Calculate the target amount per account
-    local targetAmountPerAccount = totalTargetAmount / numAccounts
-    local dropsPerAccount = calculateDropsPerAccount(targetAmountPerAccount, numAccounts, dropAmount, netAmount)
-    local totalDropped = 0
-    local totalDrops = dropsPerAccount * numAccounts
-    
-    for i = 1, totalDrops do
-        -- Drop money
-        MainEvent:FireServer("DropMoney", dropAmount)
-        totalDropped = totalDropped + dropAmount
-        
-        print("Dropped", totalDropped, "money. Target per account is", targetAmountPerAccount)
-        
-        -- Update currentmoneydrop in the server
-        updateCurrentMoneyDrop(targetUsername, totalDropped)
-        
-        -- Send a chat message after each drop
-        sendChatMessage("Dropped " .. totalDropped .. " money. Target per account is " .. targetAmountPerAccount)
-        
-        -- Wait for the cooldown before the next drop
-        wait(cooldown)
-        
-        -- Make all MoneyDrop parts invisible
-        for _, item in pairs(dropFolder:GetChildren()) do
-            if item.Name == "MoneyDrop" then
-                makeMoneyDropInvisible(item)
-            end
-        end
-        
-        -- Reset the messageSent flag for the next drop
-        messageSent = false
-    end
-    
-    print("Reached target amount of", totalTargetAmount, "money.")
-end
-
--- Function to start money dropping and send a chat message when the target user joins
-local function onTargetUserJoined(player, targetUsername, totalTargetAmount)
-    print("Checking if player is target user:", player.Name, targetUsername)
-    if player.Name == targetUsername or player.DisplayName == targetUsername then
-        print("Target user joined. Starting money drop...")
-        
-        -- Send a chat message
-        sendChatMessage("User has joined: starting dropping order amount: " .. totalTargetAmount)
-
-        dropMoney(totalTargetAmount, #altAccountUserIds + 1, targetUsername)
-        
-        -- Delete user data after dropping money
-        deleteUser(targetUsername)
-    end
-end
-
--- Function to teleport the player to a specific CFrame
-local function teleportPlayer(player, cframe)
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    
-    humanoidRootPart.CFrame = cframe
-end
-
--- Function to set up event listeners for each target user
-local function setupEventListeners(data)
-    for _, entry in ipairs(data) do
-        local targetUsername = entry.username
-        local totalTargetAmount = convertAmount(entry.amount)
-        print("Setting up listener for user:", targetUsername, "with amount:", totalTargetAmount)
-        
-        -- Listen for players joining and check if they are the target user
-        game.Players.PlayerAdded:Connect(function(player)
-            print("Player joined:", player.Name)
-            onTargetUserJoined(player, targetUsername, totalTargetAmount)
-        end)
-    end
-end
-
--- Function to make all parts in the workspace invisible
-local function makeWorkspaceInvisible()
-    for _, descendant in pairs(workspace:GetDescendants()) do
-        if descendant:IsA("BasePart") then
-            descendant.Transparency = 1
-            descendant.CanCollide = false
-        elseif descendant:IsA("Decal") or descendant:IsA("Texture") then
-            descendant.Transparency = 1
-        elseif descendant:IsA("TextLabel") then
-            descendant.Visible = false
-        end
-    end
-end
-
--- Function to create a floating platform at a specified CFrame
-local function createFloatingPlatformAtCFrame(cframePosition)
-    -- Create the platform part
-    local platform = Instance.new("Part")
-    platform.Size = Vector3.new(400, 1, 40)  -- Adjust size as needed
-    platform.Anchored = true
-    platform.CanCollide = true
-    platform.Transparency = 0.5  -- Adjust transparency as needed
-    platform.BrickColor = BrickColor.new("Bright blue")  -- Adjust color as needed
-    platform.Name = "FloatingPlatform"
-    
-
-    -- Position the platform at the specified CFrame
-    platform.CFrame = cframePosition
-
-    -- Parent the platform to the workspace
-    platform.Parent = workspace
-end
-
--- Example CFrame position, adjust as needed
-local cframePosition = CFrame.new(-375, 12, -350.124939, 0, 0, 1, 0, 1, -0, -1, 0, 0)
-
--- Make the workspace invisible
-makeWorkspaceInvisible()
-
--- Create the floating platform immediately when the script is executed
-createFloatingPlatformAtCFrame(cframePosition)
-
--- Teleport the main account and alt accounts
-local player = game.Players.LocalPlayer
-teleportPlayer(player, baseCFrame)
-sendChatMessage("Successfully setup, waiting for orders.")
-
-for i, userId in pairs(altAccountUserIds) do
-    if userId == game.Players.LocalPlayer.UserId then 
-        sendChatMessage("Alt account " .. i .. " successfully setup, waiting for orders.")
-        task.defer(function()
-            print("should tp")
-            print(positions[i])
-            while true do task.wait()
-                game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = positions[i]
-                game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
-            end
-        end)
-    end
-end
-
--- Keep fetching data every 5 seconds to check for new buyers
-while true do
-    local data = fetchData()
-    print("Fetched data:", data)
-    setupEventListeners(data)
-    wait(5)  -- Fetch data every 5 seconds
-end
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/74e3b194eb560d1324b8b6df78755b5e.lua"))()
