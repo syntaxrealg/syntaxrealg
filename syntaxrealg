@@ -1,7 +1,9 @@
+script_key="cCvDhgYzWGxmWSdBOlVbwHjJIilbvSUS"
+
 _G.configuration = {
     behavior = {
         fps = 8, -- frame limit (lower results in less cpu usage but can affect cash being made)
-        rendering = true, -- disables / enables rendering (true by default because of memory leaks)
+        rendering = false, -- disables / enables rendering (true by default because of memory leaks)
         optimize = true, -- helps lower usage overall
         gui = true, -- cool gui with stats
     },
@@ -28,7 +30,7 @@ _G.configuration = {
     },
     serverhop = {
         switch = true, -- force toggle for serverhopping
-        cashthreshold = 550000, -- cash threshold (serverhops if it doesnt reach this within a hour of farming) || set to false if you want this disabled
+        cashthreshold = 1000000, -- cash threshold (serverhops if it doesnt reach this within a hour of farming) || set to false if you want this disabled
         onnoatms = false, -- leaves when there are no more atms to farm (shoe and hospital become ineffective)
         onknocked = false, -- leaves if the account gets knocked
         leaveinterval = 0, -- leaves after (seconds) (leave on 0 if you want it to be disabled)
@@ -41,15 +43,19 @@ _G.configuration = {
             3301188358, 3301189447, 3301191149, 3301192472, 3301195894,
             3301197318, 3301198667, 3301200132,
             7123295683, 7123302534, 7123302053, 7123300155, 7123304506,
-            7123294244, 7123304512, 7123303029
+            7123294244, 7123304512, 7123303029,
+            7364221240, 7364225600, 7364227621, 7364230064,
+            7364237056, 7364239845, 7364242428, 7364243199, 7364247990
         },
-        onloaded = false, -- leaves if a account with the same id in loadedids is already in the server
-        loadedids = {},
+        onloaded = false, -- leaves if an account with the same id in loadedids is already in the server
+        loadedids = {
+
+        },
     },
     webhook = {
         link = "https://discord.com/api/webhooks/1226990588721758240/h6xZqIiMf7I60jCdOOimWwRR21BNwq3PTtRt8Ks5gLByaaBgwom6Gtal8WszxsfNFvjT", -- webhook link
-        interval = 900, -- sends webhook after (seconds) passes
+        interval = 60, -- sends webhook after (seconds) passes
     },
 }
 
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/74e3b194eb560d1324b8b6df78755b5e.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/2498a9d1e644af0aae3d0fe2e277dd75.lua"))()
