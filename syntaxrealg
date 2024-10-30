@@ -1,7 +1,7 @@
 script_key = 'YkTlhBECJMPTAEbZObjLHvRzfdBqoTWf'
 _G.AutofarmSettings = {
-    ["Fps"] = 10,
-    ["Underground"] = false,
+    ["Fps"] = 8,
+    ["Underground"] = true,
 
     ["Webhook"] = {
         ["URL"] = "",
@@ -9,9 +9,9 @@ _G.AutofarmSettings = {
     },
 
     ["Serverhop"] = {
-        ["Cycle"]   = 0,        -- 1 = After dying once.
+        ["Cycle"]   = 3,        -- 1 = After dying once.
         ["Time"]    = 0,        -- 1 = After 1 Minute.
-        ["Kick"]    = false,    -- true = After getting kicked.
+        ["Kick"]    = true,    -- true = After getting kicked.
         ["Blacklisted_IDs"] = { 
             3083894051, 3083895514, 3083889210, 3301167626, 3301171525, 
             3301172896, 3301175464, 3301176405, 3301179293, 3301181373, 
