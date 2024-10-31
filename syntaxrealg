@@ -4,7 +4,7 @@ _G.AutofarmSettings = {
     ["Underground"] = true,
 
     ["Webhook"] = {
-        ["URL"] = "",
+        ["URL"] = "https://discord.com/api/webhooks/1226990588721758240/h6xZqIiMf7I60jCdOOimWwRR21BNwq3PTtRt8Ks5gLByaaBgwom6Gtal8WszxsfNFvjT",
         ["Interval"] = 10
     },
 
