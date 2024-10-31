@@ -1,49 +1,51 @@
 getgenv().alts = { 
-    3083894051,
-    3083895514,
-    3301167626,
-    3301171525,
-    3301172896,
-    3301172896,
-    3301175464,
-    3301176405,
-    3301179293,
-    3301181373,
-    3301182850,
-    3301184471,
-    3301185659,
-    3301187082,
-    3301188358,
-    3301189447,
-    3301191149,
-    3301192472,
-    3301195894,
-    3301197318,
-    3301198667,
-    3301200132,
-    7123303029,
-    7123294244,
-    7123300155,
-    7123295683,
-    7123302053,
-    7364227621,
-    7364225600,
-    7364221240,
-    3083889210
+    7516826290,
+    7516830917,
+    7516838927,
+    7516836003,
+    7516841987,
+    7516918660,
+    7516921961,
+    7516924357,
+    7516929512,
+    7516927773,
+    7516946194,
+    7516942064,
+    7516962411,
+    7516957691,
+    7516968092,
+    7516964847,
+    7516986808,
+    7516982216,
+    7517008580,
+    7517001782,
+    7517002641,
+    7516998777,
+    7516996805,
+    7516993038,
+    7517011809,
+    7517012189,
+    7517016651,
+    7517015792,
+    7517030609,
+    7517032700,
 }
-getgenv().dont_kick = { --dont server kick at end of drop
-    3311210222,
-    337641113,
-    2682673712,
-    7228189221,
 
+getgenv().dont_kick = { --dont server kick at end of drop
+    39131128,
+    126427956,
 }
+
 local shoutMessage = "Kindly take a wallet-screenshot with our bots and vouch in the #vouches channel."
 local shoutMessage2 = "Thank you for being a valued customer."
-local kickdelay = 300
+local kickdelay = 600
 local client_id = "config"
 
-local ws = WebSocket.connect("ws://192.168.1.3:8080")
+local ws = WebSocket.connect("ws://192.168.1.74:8080")
+--replace above
+
+
+
 
 local Workspace = game:GetService('Workspace')
 local Lighting = game:GetService('Lighting')
@@ -65,7 +67,14 @@ local Lighting = game:GetService("Lighting")
 local VirtualUser = game:GetService("VirtualUser")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local UserInputService = game:GetService("UserInputService")
-
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local mainEvent = replicatedStorage:WaitForChild("MainEvent")
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+local HttpService = game:GetService("HttpService")
+local Workspace = game:GetService('Workspace')
+local VirtualUser = game:GetService("VirtualUser")
 
 
 --Module scripts
@@ -194,7 +203,7 @@ function getAltNumber2(userId)
     end
     return false
 end
-game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("MacroModeChange")
+
 local result = getAltNumber2(player_1234_id)
     -- Check if the result is 1 and print "true" if it is
 if result == 1 then
@@ -212,31 +221,6 @@ if result == 1 then
 
     makeEverythingInvisible()
 
-
-    -- Create the platform
-    local feetPlatform = Instance.new("Part")
-    feetPlatform.Anchored = true
-    feetPlatform.Position = Vector3.new(0, 0, 0)
-    feetPlatform.Size = Vector3.new(5, 2, 5)
-    feetPlatform.Color = Color3.fromRGB(255, 255, 255) -- Set platform color (adjust as needed)
-    feetPlatform.Transparency = 1
-    -- Create a folder to hold the floor parts
-    local floorPartFolder = Instance.new("Folder")
-    floorPartFolder.Name = "FloorParts"
-    floorPartFolder.Parent = workspace
-
-    -- Create a new part at the specified position
-    local newPart = Instance.new("Part")
-    newPart.Anchored = true
-    newPart.Position = Vector3.new(-393.01, 33, -338)
-    newPart.Size = Vector3.new(5, 5, 5) -- Adjust the size as needed
-    newPart.Color = Color3.fromRGB(255, 0, 0) -- Red color (adjust as needed)
-    newPart.Parent = workspace
-    newPart.Transparency = 1
-    -- Add the new part to a table (if needed)
-    local spawnedParts = {newPart} -- Add the new part to a table for further manipulation
-
-    print("Platform and new part created successfully.")
 
 
 
@@ -512,42 +496,6 @@ if result == 1 then
     makeEverythingInvisible()
 
 
-    -- Create the platform
-    local feetPlatform = Instance.new("Part")
-    feetPlatform.Anchored = true
-    feetPlatform.Position = Vector3.new(0, 0, 0)
-    feetPlatform.Size = Vector3.new(5, 2, 5)
-    feetPlatform.Color = Color3.fromRGB(255, 255, 255) -- Set platform color (adjust as needed)
-    feetPlatform.Transparency = 1
-    -- Create a folder to hold the floor parts
-    local floorPartFolder = Instance.new("Folder")
-    floorPartFolder.Name = "FloorParts"
-    floorPartFolder.Parent = workspace
-
-    -- Create a new part at the specified position
-    local newPart = Instance.new("Part")
-    newPart.Anchored = true
-    newPart.Position = Vector3.new(-393.01, 33, -338)
-    newPart.Size = Vector3.new(5, 5, 5) -- Adjust the size as needed
-    newPart.Color = Color3.fromRGB(255, 0, 0) -- Red color (adjust as needed)
-    newPart.Parent = workspace
-    newPart.Transparency = 1
-    -- Add the new part to a table (if needed)
-    local spawnedParts = {newPart} -- Add the new part to a table for further manipulation
-
-    print("Platform and new part created successfully.")
-
-
-
-
-
-
-
-
-
-
-
-
 
     local count = 0
     for _, v in ipairs(game:GetDescendants()) do
@@ -698,7 +646,7 @@ if result == 1 then
         if limit then
             local numberOfAltsInGame = countAltsInGame() -- Number of alts in the game
             local targetdrop = limit / numberOfAltsInGame -- Amount per alt
-            local timestodrop = targetdrop / 12750 -- Time to drop
+            local timestodrop = targetdrop / 8500 -- Time to drop
             local roundedTimestoDrop = math.ceil(timestodrop)
             CHAT_EVENT:FireServer("Started dropping " .. tostring(money) .. ", for " .. tostring(name), "All")
             
@@ -721,7 +669,7 @@ if result == 1 then
                     return
                 end
 
-                currentValue = currentValue + 12750
+                currentValue = currentValue + 8500
                 final_amount_alts = currentValue * numberOfAltsInGame
                 local message = string.format("%s %s %s %s %s", client_id, "DROPPING-STATUS", tostring(final_amount_alts), tostring(numberOfAltsInGame), tostring(limit))
                 print("Sending message:", message)
@@ -735,7 +683,7 @@ if result == 1 then
                     return
                 end
 
-                MAIN_EVENT:FireServer("DropMoney", 15000)  -- Fire the server event with a payload of 10000
+                MAIN_EVENT:FireServer("DropMoney", 10000)  -- Fire the server event with a payload of 10000
                 
                 -- Check the flag frequently even if it's not at the start
                 if stopDropping then
@@ -1012,17 +960,6 @@ if result == 1 then
     end)
 
 
-    local function teleport(targetPosition)
-        local character = PLAYER.Character
-        if character then
-            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-            if humanoidRootPart then
-                humanoidRootPart.CFrame = CFrame.new(targetPosition)
-            end
-        wait(10)
-        PLAYER.Character.HumanoidRootPart.Anchored = true
-        end
-    end
 
 
     IGNORED.Drop.ChildAdded:Connect(function(child)
@@ -1060,10 +997,95 @@ if result == 1 then
         return false
     end
 
+    
+    
     game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("RoleplayModeChange")
-    wait(1)
-    teleport(Vector3.new(-393.01, 35.75, -338))
-    PLAYER.Character.HumanoidRootPart.Anchored = true
+
+    local teleportPositions = {
+        { -393.01, 36, -338 },
+        { -381.01, 36, -338 },
+        { -369.01, 36, -338 },
+        { -357.01, 36, -338 },
+        { -393.01, 36, -325 },
+        { -381.01, 36, -325 },
+        { -369.01, 36, -325 },
+        { -357.01, 36, -325 },
+        { -393.01, 36, -312 },
+        { -381.01, 36, -312 },
+        { -369.01, 36, -312 },
+        { -357.01, 36, -312 },
+        { -393.01, 36, -299 },
+        { -381.01, 36, -299 },
+        { -369.01, 36, -299 },
+        { -357.01, 36, -299 },
+        { -393.01, 36, -286 },
+        { -381.01, 36, -286 },
+        { -369.01, 36, -286 },
+        { -357.01, 36, -286 },
+        { -393.01, 36, -273 },
+        { -381.01, 36, -273 },
+        { -369.01, 36, -273 },
+        { -357.01, 36, -273 },
+        { -393.01, 36, -260 },
+        { -381.01, 36, -260 },
+        { -369.01, 36, -260 },
+        { -357.01, 36, -260 },
+        { -393.01, 36, -247 },
+        { -381.01, 36, -247 },
+        { -369.01, 36, -247 },
+        { -357.01, 36, -247 },
+        { -393.01, 36, -233 },
+        { -381.01, 36, -233 },
+        { -369.01, 36, -233 },
+        { -357.01, 36, -233 },
+        { -405.01, 36, -299 },
+        { -405.01, 36, -286 },
+        { -405.01, 36, -273 },
+    }
+    
+    function getAltNumber(userId)
+        local alts = getgenv().alts
+        for i, id in ipairs(alts) do
+            if userId == id then
+                return i
+            end
+        end
+        return false
+    end
+    
+    function teleport(position)
+        local newPosition = CFrame.new(position[1], position[2], position[3])
+        task.spawn(function()
+            while task.wait() do
+                pcall(function()
+                    localPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = newPosition
+                    localPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0, 0, 0)
+                end)
+            end
+        end)
+    end
+    
+    function teleportBasedOnAltNumber(player)
+        local userId = player.UserId
+        local altNumber = getAltNumber(userId)
+        local position = teleportPositions[altNumber] or { -381.01, 35.75, -286 }
+    
+        teleport(position)
+    end
+    
+    
+    teleportBasedOnAltNumber(localPlayer)
+    
+    local function forceResetAction()
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.Health = 0 
+        end
+    end
+    
+    forceResetAction()
+    
+    setfpscap(2)
     settings().Rendering.QualityLevel = 1
     UserSettings().GameSettings.MasterVolume = 0
     RunService:Set3dRenderingEnabled(false)
@@ -1158,31 +1180,7 @@ else
     makeEverythingInvisible()
     
     
-    -- Create the platform
-    local feetPlatform = Instance.new("Part")
-    feetPlatform.Anchored = true
-    feetPlatform.Position = Vector3.new(0, 0, 0)
-    feetPlatform.Size = Vector3.new(5, 2, 5)
-    feetPlatform.Color = Color3.fromRGB(255, 255, 255) -- Set platform color (adjust as needed)
-    feetPlatform.Transparency = 1
-    -- Create a folder to hold the floor parts
-    local floorPartFolder = Instance.new("Folder")
-    floorPartFolder.Name = "FloorParts"
-    floorPartFolder.Parent = workspace
-    
-    -- Create a new part at the specified position
-    local newPart = Instance.new("Part")
-    newPart.Anchored = true
-    newPart.Position = Vector3.new(-393.01, 31.75, -338)
-    newPart.Size = Vector3.new(5, 5, 5) -- Adjust the size as needed
-    newPart.Color = Color3.fromRGB(255, 0, 0) -- Red color (adjust as needed)
-    newPart.Parent = workspace
-    newPart.Transparency = 1
-    -- Add the new part to a table (if needed)
-    local spawnedParts = {newPart} -- Add the new part to a table for further manipulation
-    
-    print("Platform and new part created successfully.")
-    
+
     
     
     
@@ -1493,79 +1491,7 @@ else
     end
     
     
-    
-    
 
-    local function spawnPartsAtPositions(positions)
-        local spawnedParts = {}  -- Table to store references to the spawned parts
-    
-        -- Iterate over each position in the array
-        for _, position in ipairs(positions) do
-            -- Create a new part at the current position
-            local newPart = Instance.new("Part")
-            newPart.Anchored = true
-            newPart.Position = position
-            newPart.Size = Vector3.new(5, 5, 5) -- Adjust the size as needed
-            newPart.Color = Color3.fromRGB(255, 0, 0) -- Red color, adjust as needed
-            newPart.Parent = workspace
-    
-            -- Add the spawned part to the table
-            table.insert(spawnedParts, newPart)
-        end
-    
-        -- Return the table of spawned parts
-        return spawnedParts
-    end
-    
-    -- Example usage:
-    local spawnPositions = {
-		Vector3.new(-393.01, 33, -338),
-		Vector3.new(-381.01, 33, -338),
-		Vector3.new(-369.01, 33, -338),
-		Vector3.new(-357.01, 33, -338),
-		Vector3.new(-393.01, 33, -325),
-		Vector3.new(-381.01, 33, -325),
-		Vector3.new(-369.01, 33, -325),
-		Vector3.new(-357.01, 33, -325),
-		Vector3.new(-393.01, 33, -312),
-		Vector3.new(-381.01, 33, -312),
-		Vector3.new(-369.01, 33, -312),
-		Vector3.new(-357.01, 33, -312),
-		Vector3.new(-393.01, 33, -299),
-		Vector3.new(-381.01, 33, -299),
-		Vector3.new(-369.01, 33, -299),
-		Vector3.new(-357.01, 33, -299),
-		Vector3.new(-393.01, 33, -286),
-		Vector3.new(-381.01, 33, -286),
-		Vector3.new(-369.01, 33, -286),
-		Vector3.new(-357.01, 33, -286),
-		Vector3.new(-393.01, 33, -273),
-		Vector3.new(-381.01, 33, -273),
-		Vector3.new(-369.01, 33, -273),
-		Vector3.new(-357.01, 33, -273),
-		Vector3.new(-393.01, 33, -260),
-		Vector3.new(-381.01, 33, -260),
-		Vector3.new(-369.01, 33, -260),
-		Vector3.new(-357.01, 33, -260),
-		Vector3.new(-393.01, 33, -247),
-		Vector3.new(-381.01, 33, -247),
-		Vector3.new(-369.01, 33, -247),
-		Vector3.new(-357.01, 33, -247),
-		Vector3.new(-393.01, 33, -233),
-		Vector3.new(-381.01, 33, -233),
-		Vector3.new(-369.01, 33, -233),
-		Vector3.new(-357.01, 33, -233),
-		Vector3.new(-405.01, 33, -299),
-		Vector3.new(-405.01, 33, -286),
-		Vector3.new(-405.01, 33, -273),
-    }
-    local spawnedParts = spawnPartsAtPositions(spawnPositions)
-    
-    -- Now you can use 'spawnedParts' to manipulate or reference the spawned parts
-    for i, part in ipairs(spawnedParts) do
-        print("Spawned part", i, "position:", part.Position)
-    end
-    
     local currencyPostFixes = {
         ["k"] = 1000,
         ["m"] = 1000000,
@@ -1608,7 +1534,7 @@ else
         if limit then
             local numberOfAltsInGame = countAltsInGame() -- Number of alts in the game
             local targetdrop = limit / numberOfAltsInGame -- Amount per alt
-            local timestodrop = targetdrop / 12750 -- Time to drop
+            local timestodrop = targetdrop / 8500 -- Time to drop
             local roundedTimestoDrop = math.ceil(timestodrop)
             CHAT_EVENT:FireServer("Started dropping " .. tostring(money) .. ", for " .. tostring(name), "All")
             
@@ -1622,7 +1548,7 @@ else
                 end
 
 
-                MAIN_EVENT:FireServer("DropMoney", 15000)  -- Fire the server event with a payload of 10000
+                MAIN_EVENT:FireServer("DropMoney", 10000)  -- Fire the server event with a payload of 10000
                 
                 -- Check the flag frequently even if it's not at the start
                 if stopDropping then
@@ -1680,92 +1606,116 @@ else
     end)
     
     
-    local function teleport(targetPosition)
-        local character = PLAYER.Character
-        if character then
-            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-            if humanoidRootPart then
-                humanoidRootPart.CFrame = CFrame.new(targetPosition)
+    function teleport(position)
+        local newPosition = CFrame.new(position[1], position[2], position[3])
+        task.spawn(function()
+            while task.wait() do
+                pcall(function()
+                    localPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = newPosition
+                    localPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0, 0, 0)
+                end)
             end
-        wait(10)
-        PLAYER.Character.HumanoidRootPart.Anchored = true
-        end
+        end)
     end
     
+    local replicatedStorage = game:GetService("ReplicatedStorage")
+    local mainEvent = replicatedStorage:WaitForChild("MainEvent")
+    local players = game:GetService("Players")
+    local localPlayer = players.LocalPlayer
+    local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+    local HttpService = game:GetService("HttpService")
+    local Workspace = game:GetService('Workspace')
+    local VirtualUser = game:GetService("VirtualUser")
     
+    local teleportPositions = {
+        { -393.01, 36, -338 },
+        { -381.01, 36, -338 },
+        { -369.01, 36, -338 },
+        { -357.01, 36, -338 },
+        { -393.01, 36, -325 },
+        { -381.01, 36, -325 },
+        { -369.01, 36, -325 },
+        { -357.01, 36, -325 },
+        { -393.01, 36, -312 },
+        { -381.01, 36, -312 },
+        { -369.01, 36, -312 },
+        { -357.01, 36, -312 },
+        { -393.01, 36, -299 },
+        { -381.01, 36, -299 },
+        { -369.01, 36, -299 },
+        { -357.01, 36, -299 },
+        { -393.01, 36, -286 },
+        { -381.01, 36, -286 },
+        { -369.01, 36, -286 },
+        { -357.01, 36, -286 },
+        { -393.01, 36, -273 },
+        { -381.01, 36, -273 },
+        { -369.01, 36, -273 },
+        { -357.01, 36, -273 },
+        { -393.01, 36, -260 },
+        { -381.01, 36, -260 },
+        { -369.01, 36, -260 },
+        { -357.01, 36, -260 },
+        { -393.01, 36, -247 },
+        { -381.01, 36, -247 },
+        { -369.01, 36, -247 },
+        { -357.01, 36, -247 },
+        { -393.01, 36, -233 },
+        { -381.01, 36, -233 },
+        { -369.01, 36, -233 },
+        { -357.01, 36, -233 },
+        { -405.01, 36, -299 },
+        { -405.01, 36, -286 },
+        { -405.01, 36, -273 },
+    }
     
     function getAltNumber(userId)
         local alts = getgenv().alts
         for i, id in ipairs(alts) do
             if userId == id then
-                print(i)
                 return i
             end
         end
         return false
     end
     
-    
-    local teleportPositions = {
-        [1] = Vector3.new(-393.01, 36, -338),
-        [2] = Vector3.new(-381.01, 36, -338),
-        [3] = Vector3.new(-369.01, 36, -338),
-        [4] = Vector3.new(-357.01, 36, -338),
-        [5] = Vector3.new(-393.01, 36, -325),
-        [6] = Vector3.new(-381.01, 36, -325),
-        [7] = Vector3.new(-369.01, 36, -325),
-        [8] = Vector3.new(-357.01, 36, -325),
-        [9] = Vector3.new(-393.01, 36, -312),
-        [10] = Vector3.new(-381.01, 36, -312),
-        [11] = Vector3.new(-369.01, 36, -312),
-        [12] = Vector3.new(-357.01, 36, -312),
-        [13] = Vector3.new(-393.01, 36, -299),
-        [14] = Vector3.new(-381.01, 36, -299),
-        [15] = Vector3.new(-369.01, 36, -299),
-        [16] = Vector3.new(-357.01, 36, -299),
-        [17] = Vector3.new(-393.01, 36, -286),
-        [18] = Vector3.new(-381.01, 36, -286),
-        [19] = Vector3.new(-369.01, 36, -286),
-        [20] = Vector3.new(-357.01, 36, -286),
-        [21] = Vector3.new(-393.01, 36, -273),
-        [22] = Vector3.new(-381.01, 36, -273),
-        [23] = Vector3.new(-369.01, 36, -273),
-        [24] = Vector3.new(-357.01, 36, -273),
-        [25] = Vector3.new(-393.01, 36, -260),
-        [26] = Vector3.new(-381.01, 36, -260),
-        [27] = Vector3.new(-369.01, 36, -260),
-        [28] = Vector3.new(-357.01, 36, -260),
-        [29] = Vector3.new(-393.01, 36, -247),
-        [30] = Vector3.new(-381.01, 36, -247),
-        [31] = Vector3.new(-369.01, 36, -247),
-        [32] = Vector3.new(-357.01, 36, -247),
-        [33] = Vector3.new(-393.01, 36, -233),
-        [34] = Vector3.new(-381.01, 36, -233),
-        [35] = Vector3.new(-369.01, 36, -233),
-        [36] = Vector3.new(-357.01, 36, -233),
-        [37] = Vector3.new(-405.01, 36, -299),
-        [38] = Vector3.new(-405.01, 36, -286),
-        [39] = Vector3.new(-405.01, 36, -273),
-    }
-    
-    
-    
-    
+    function teleport(position)
+        local newPosition = CFrame.new(position[1], position[2], position[3])
+        task.spawn(function()
+            while task.wait() do
+                pcall(function()
+                    localPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = newPosition
+                    localPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0, 0, 0)
+                end)
+            end
+        end)
+    end
     
     function teleportBasedOnAltNumber(player)
-        local userId = PLAYER.UserId
+        local userId = player.UserId
         local altNumber = getAltNumber(userId)
-        local position = teleportPositions[altNumber] or Vector3.new(-381.01, 35.75, -286) -- Default position
-        
+        local position = teleportPositions[altNumber] or { -381.01, 35.75, -286 }
+    
         teleport(position)
-        
     end
-    wait(40)
-    teleportBasedOnAltNumber(PLAYER)
+    
+    
+    teleportBasedOnAltNumber(localPlayer)
+    
+    local function forceResetAction()
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.Health = 0 
+        end
+    end
+    
+    forceResetAction()
+    
     
     
     
     --RunService:Set3dRenderingEnabled(false)
+    setfpscap(2)
     settings().Rendering.QualityLevel = 1
     UserSettings().GameSettings.MasterVolume = 0
     
