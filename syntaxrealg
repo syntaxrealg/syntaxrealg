@@ -38,7 +38,7 @@ getgenv().dont_kick = { --dont server kick at end of drop
 
 local shoutMessage = "Kindly take a wallet-screenshot with our bots and vouch in the #vouches channel."
 local shoutMessage2 = "Thank you for being a valued customer."
-local kickdelay = 600
+local kickdelay = 300
 local client_id = "config"
 
 local ws = WebSocket.connect("ws://192.168.1.74:8080")
