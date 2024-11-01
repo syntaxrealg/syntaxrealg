@@ -34,15 +34,13 @@ getgenv().dont_kick = { --dont server kick at end of drop
     39131128,
     126427956,
 }
+
 local shoutMessage = "Kindly take a wallet-screenshot with our bots and vouch in the #vouches channel."
 local shoutMessage2 = "Thank you for being a valued customer."
-local kickdelay = 600
+local kickdelay = 180
 local client_id = "config"
 
 local ws = WebSocket.connect("ws://192.168.1.3:8080")
---replace above
-
-
 
 local Workspace = game:GetService('Workspace')
 local Lighting = game:GetService('Lighting')
@@ -110,6 +108,113 @@ local REQUIRED_CHAR_PARTS = {
     ["LowerTorso"] = true,
     ["Head"] = true,
 }
+
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local mainEvent = replicatedStorage:WaitForChild("MainEvent")
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+local HttpService = game:GetService("HttpService")
+local Workspace = game:GetService('Workspace')
+local VirtualUser = game:GetService("VirtualUser")
+
+local teleportPositions = {
+    { -393.01, 36, -338 },
+    { -381.01, 36, -338 },
+    { -369.01, 36, -338 },
+    { -357.01, 36, -338 },
+    { -393.01, 36, -325 },
+    { -381.01, 36, -325 },
+    { -369.01, 36, -325 },
+    { -357.01, 36, -325 },
+    { -393.01, 36, -312 },
+    { -381.01, 36, -312 },
+    { -369.01, 36, -312 },
+    { -357.01, 36, -312 },
+    { -393.01, 36, -299 },
+    { -381.01, 36, -299 },
+    { -369.01, 36, -299 },
+    { -357.01, 36, -299 },
+    { -393.01, 36, -286 },
+    { -381.01, 36, -286 },
+    { -369.01, 36, -286 },
+    { -357.01, 36, -286 },
+    { -393.01, 36, -273 },
+    { -381.01, 36, -273 },
+    { -369.01, 36, -273 },
+    { -357.01, 36, -273 },
+    { -393.01, 36, -260 },
+    { -381.01, 36, -260 },
+    { -369.01, 36, -260 },
+    { -357.01, 36, -260 },
+    { -393.01, 36, -247 },
+    { -381.01, 36, -247 },
+    { -369.01, 36, -247 },
+    { -357.01, 36, -247 },
+    { -393.01, 36, -233 },
+    { -381.01, 36, -233 },
+    { -369.01, 36, -233 },
+    { -357.01, 36, -233 },
+    { -405.01, 36, -299 },
+    { -405.01, 36, -286 },
+    { -405.01, 36, -273 },
+}
+
+function getAltNumber(userId)
+    local alts = getgenv().alts
+    for i, id in ipairs(alts) do
+        if userId == id then
+            return i
+        end
+    end
+    return false
+end
+
+
+
+
+
+local TweenService = game:GetService("TweenService")
+
+
+
+    
+local function teleport(position)
+    local position = CFrame.new(position[1], position[2], position[3])
+    task.spawn(function()
+        while task.wait() do
+            pcall(function()
+                localPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = position
+                localPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0, 0, 0)
+            end)
+        end
+    end)
+end
+
+function teleportBasedOnAltNumber(player)
+    local userId = player.UserId
+    local altNumber = getAltNumber(userId)
+    local position = teleportPositions[altNumber] or { -381.01, 35.75, -286 }
+
+    teleport(position)
+end
+
+
+
+
+
+
+
+
+game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("RoleplayModeChange")
+wait(1)
+game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("MacroModeChange")
+
+wait(30)
+
+
+teleportBasedOnAltNumber(localPlayer)
+
 
 
 Terrain.WaterWaveSize = 0
@@ -643,8 +748,7 @@ if result == 1 then
         if limit then
             local numberOfAltsInGame = countAltsInGame() -- Number of alts in the game
             local targetdrop = limit / numberOfAltsInGame -- Amount per alt
-            local timestodrop = targetdrop / 8500 -- Time to drop
-            local roundedTimestoDrop = math.ceil(timestodrop)
+            local roundedTimestoDrop = math.ceil(targetdrop / 12750) -- Time to drop
             CHAT_EVENT:FireServer("Started dropping " .. tostring(money) .. ", for " .. tostring(name), "All")
             
             local currentValue = 0 
@@ -680,7 +784,7 @@ if result == 1 then
                     return
                 end
 
-                MAIN_EVENT:FireServer("DropMoney", 10000)  -- Fire the server event with a payload of 10000
+                MAIN_EVENT:FireServer("DropMoney", 15000)  -- Fire the server event with a payload of 10000
                 
                 -- Check the flag frequently even if it's not at the start
                 if stopDropping then
@@ -996,93 +1100,10 @@ if result == 1 then
 
     
     
-    game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("RoleplayModeChange")
 
-    local teleportPositions = {
-        { -393.01, 36, -338 },
-        { -381.01, 36, -338 },
-        { -369.01, 36, -338 },
-        { -357.01, 36, -338 },
-        { -393.01, 36, -325 },
-        { -381.01, 36, -325 },
-        { -369.01, 36, -325 },
-        { -357.01, 36, -325 },
-        { -393.01, 36, -312 },
-        { -381.01, 36, -312 },
-        { -369.01, 36, -312 },
-        { -357.01, 36, -312 },
-        { -393.01, 36, -299 },
-        { -381.01, 36, -299 },
-        { -369.01, 36, -299 },
-        { -357.01, 36, -299 },
-        { -393.01, 36, -286 },
-        { -381.01, 36, -286 },
-        { -369.01, 36, -286 },
-        { -357.01, 36, -286 },
-        { -393.01, 36, -273 },
-        { -381.01, 36, -273 },
-        { -369.01, 36, -273 },
-        { -357.01, 36, -273 },
-        { -393.01, 36, -260 },
-        { -381.01, 36, -260 },
-        { -369.01, 36, -260 },
-        { -357.01, 36, -260 },
-        { -393.01, 36, -247 },
-        { -381.01, 36, -247 },
-        { -369.01, 36, -247 },
-        { -357.01, 36, -247 },
-        { -393.01, 36, -233 },
-        { -381.01, 36, -233 },
-        { -369.01, 36, -233 },
-        { -357.01, 36, -233 },
-        { -405.01, 36, -299 },
-        { -405.01, 36, -286 },
-        { -405.01, 36, -273 },
-    }
+
     
-    function getAltNumber(userId)
-        local alts = getgenv().alts
-        for i, id in ipairs(alts) do
-            if userId == id then
-                return i
-            end
-        end
-        return false
-    end
-    
-    function teleport(position)
-        local newPosition = CFrame.new(position[1], position[2], position[3])
-        task.spawn(function()
-            while task.wait() do
-                pcall(function()
-                    localPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = newPosition
-                    localPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0, 0, 0)
-                end)
-            end
-        end)
-    end
-    
-    function teleportBasedOnAltNumber(player)
-        local userId = player.UserId
-        local altNumber = getAltNumber(userId)
-        local position = teleportPositions[altNumber] or { -381.01, 35.75, -286 }
-    
-        teleport(position)
-    end
-    
-    
-    teleportBasedOnAltNumber(localPlayer)
-    
-    local function forceResetAction()
-        local player = game.Players.LocalPlayer
-        if player.Character and player.Character:FindFirstChild("Humanoid") then
-            player.Character.Humanoid.Health = 0 
-        end
-    end
-    
-    forceResetAction()
-    
-    setfpscap(2)
+
     settings().Rendering.QualityLevel = 1
     UserSettings().GameSettings.MasterVolume = 0
     RunService:Set3dRenderingEnabled(false)
@@ -1531,8 +1552,7 @@ else
         if limit then
             local numberOfAltsInGame = countAltsInGame() -- Number of alts in the game
             local targetdrop = limit / numberOfAltsInGame -- Amount per alt
-            local timestodrop = targetdrop / 8500 -- Time to drop
-            local roundedTimestoDrop = math.ceil(timestodrop)
+            local roundedTimestoDrop = math.ceil(targetdrop / 12750)-- Time to drop
             CHAT_EVENT:FireServer("Started dropping " .. tostring(money) .. ", for " .. tostring(name), "All")
             
             local currentValue = 0 
@@ -1545,7 +1565,7 @@ else
                 end
 
 
-                MAIN_EVENT:FireServer("DropMoney", 10000)  -- Fire the server event with a payload of 10000
+                MAIN_EVENT:FireServer("DropMoney", 15000)  -- Fire the server event with a payload of 10000
                 
                 -- Check the flag frequently even if it's not at the start
                 if stopDropping then
@@ -1602,117 +1622,14 @@ else
         VirtualUser:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
     end)
     
-    
-    function teleport(position)
-        local newPosition = CFrame.new(position[1], position[2], position[3])
-        task.spawn(function()
-            while task.wait() do
-                pcall(function()
-                    localPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = newPosition
-                    localPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0, 0, 0)
-                end)
-            end
-        end)
-    end
-    
-    local replicatedStorage = game:GetService("ReplicatedStorage")
-    local mainEvent = replicatedStorage:WaitForChild("MainEvent")
-    local players = game:GetService("Players")
-    local localPlayer = players.LocalPlayer
-    local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
-    local HttpService = game:GetService("HttpService")
-    local Workspace = game:GetService('Workspace')
-    local VirtualUser = game:GetService("VirtualUser")
-    
-    local teleportPositions = {
-        { -393.01, 36, -338 },
-        { -381.01, 36, -338 },
-        { -369.01, 36, -338 },
-        { -357.01, 36, -338 },
-        { -393.01, 36, -325 },
-        { -381.01, 36, -325 },
-        { -369.01, 36, -325 },
-        { -357.01, 36, -325 },
-        { -393.01, 36, -312 },
-        { -381.01, 36, -312 },
-        { -369.01, 36, -312 },
-        { -357.01, 36, -312 },
-        { -393.01, 36, -299 },
-        { -381.01, 36, -299 },
-        { -369.01, 36, -299 },
-        { -357.01, 36, -299 },
-        { -393.01, 36, -286 },
-        { -381.01, 36, -286 },
-        { -369.01, 36, -286 },
-        { -357.01, 36, -286 },
-        { -393.01, 36, -273 },
-        { -381.01, 36, -273 },
-        { -369.01, 36, -273 },
-        { -357.01, 36, -273 },
-        { -393.01, 36, -260 },
-        { -381.01, 36, -260 },
-        { -369.01, 36, -260 },
-        { -357.01, 36, -260 },
-        { -393.01, 36, -247 },
-        { -381.01, 36, -247 },
-        { -369.01, 36, -247 },
-        { -357.01, 36, -247 },
-        { -393.01, 36, -233 },
-        { -381.01, 36, -233 },
-        { -369.01, 36, -233 },
-        { -357.01, 36, -233 },
-        { -405.01, 36, -299 },
-        { -405.01, 36, -286 },
-        { -405.01, 36, -273 },
-    }
-    
-    function getAltNumber(userId)
-        local alts = getgenv().alts
-        for i, id in ipairs(alts) do
-            if userId == id then
-                return i
-            end
-        end
-        return false
-    end
-    
-    function teleport(position)
-        local newPosition = CFrame.new(position[1], position[2], position[3])
-        task.spawn(function()
-            while task.wait() do
-                pcall(function()
-                    localPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = newPosition
-                    localPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0, 0, 0)
-                end)
-            end
-        end)
-    end
-    
-    function teleportBasedOnAltNumber(player)
-        local userId = player.UserId
-        local altNumber = getAltNumber(userId)
-        local position = teleportPositions[altNumber] or { -381.01, 35.75, -286 }
-    
-        teleport(position)
-    end
-    
-    
-    teleportBasedOnAltNumber(localPlayer)
-    
-    local function forceResetAction()
-        local player = game.Players.LocalPlayer
-        if player.Character and player.Character:FindFirstChild("Humanoid") then
-            player.Character.Humanoid.Health = 0 
-        end
-    end
-    
-    forceResetAction()
+
     
     
     
+
     
+    wait(20)
     --RunService:Set3dRenderingEnabled(false)
-    setfpscap(2)
     settings().Rendering.QualityLevel = 1
     UserSettings().GameSettings.MasterVolume = 0
     
