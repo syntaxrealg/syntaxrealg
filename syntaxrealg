@@ -31,7 +31,7 @@ getgenv().alts = {
     7517032700,
 }
 getgenv().dont_kick = { --dont server kick at end of drop
-    39131128,
+    3311210222,
     126427956,
 }
 
