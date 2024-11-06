@@ -1,6 +1,6 @@
 script_key = 'YkTlhBECJMPTAEbZObjLHvRzfdBqoTWf'
 _G.AutofarmSettings = {
-    ["Fps"] = 8,
+    ["Fps"] = 12,
     ["Underground"] = true,
 
     ["Webhook"] = {
