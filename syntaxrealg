@@ -1,7 +1,7 @@
 _G.polarsblade = {
     client = {
         fps = 5,
-        rendering = false,
+        rendering = true,
         gui = false,
     },
     items = {
