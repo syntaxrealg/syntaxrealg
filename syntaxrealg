@@ -10,7 +10,7 @@ _G.AutofarmSettings = {
 
     ["Serverhop"] = {
         ["Cycle"]   = 3,        -- 1 = After dying once.
-        ["Time"]    = 60,        -- 1 = After 1 Minute.
+        ["Time"]    = 90,        -- 1 = After 1 Minute.
         ["Kick"]    = true,    -- true = After getting kicked.
         ["Blacklisted_IDs"] = { 
             3083894051, 3083895514, 3083889210, 3301167626, 3301171525, 
