@@ -39,7 +39,7 @@ local shoutMessage2 = "Thank you for being a valued customer."
 local kickdelay = 300
 local client_id = "config"
 
-local ws = WebSocket.connect("ws://192.168.1.4:8080")
+local ws = WebSocket.connect("ws://192.168.2:8080")
 
 local Workspace = game:GetService('Workspace')
 local Lighting = game:GetService('Lighting')
