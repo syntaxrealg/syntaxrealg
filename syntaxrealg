@@ -156,12 +156,9 @@ function getAltNumber(userId)
     end
     return false
 end
+ws:Send(client_id)
 
 
-
-
-
-local TweenService = game:GetService("TweenService")
 
 
 
@@ -199,9 +196,11 @@ if game.Players.LocalPlayer.UserId == ps_owner_id then
     if ismacro() then
         print("Macro is already on")
     else
-        game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("RoleplayModeChange")
-        wait(1)
+        print("turning on macro")
         game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("MacroModeChange")
+        wait(5)
+        game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("RoleplayModeChange")
+        wait(2)
     end
 else
     if ismacro() then
@@ -368,7 +367,7 @@ if result == 1 then
     local MAIN_EVENT = ReplicatedStorage:WaitForChild("MainEvent")
     local CHAT_EVENT = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
     local PLAYER_GUI = PLAYER:WaitForChild("PlayerGui")
-    local CORE_GUI = game.CoreGui
+    --local CORE_GUI = game.CoreGui
 
 
 
@@ -1069,7 +1068,7 @@ if result == 1 then
 
 
   
-    ws:Send(client_id)
+   
 
     -- Define your WebSocket message handler
     ws.OnMessage:Connect(function(message)
@@ -1508,7 +1507,7 @@ else
 
     
     
-    ws:Send(client_id)
+
 
     -- Define your WebSocket message handler
     ws.OnMessage:Connect(function(message)
