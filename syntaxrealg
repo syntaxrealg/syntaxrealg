@@ -41,7 +41,7 @@ local shoutMessage2 = "Thank you for being a valued customer."
 local kickdelay = 300
 local client_id = "config"
 
-local ws = WebSocket.connect("ws://192.168.1.6:8080")
+local ws = WebSocket.connect("ws://192.168.1.79:8080")
 
 
 local Workspace = game:GetService('Workspace')
@@ -719,6 +719,7 @@ if result == 1 then
 
     -- Modified dropMoney function
     function dropMoney(money, name)
+        print("Drop1")
         is_dropping = true
         local amountString = money
         local limit = tonumber(amountString)
@@ -1166,7 +1167,7 @@ else
     
     --Gui
     local PLAYER_GUI = PLAYER:WaitForChild("PlayerGui")
-    local CORE_GUI = game.CoreGui
+    --local CORE_GUI = game.CoreGui
     
         
     -- Assuming PLAYER is defined and is the current player
@@ -1392,13 +1393,26 @@ else
         end
     end
 
-
+    local CASHIERS = workspace:WaitForChild("Cashiers")
+    local IGNORED = workspace:WaitForChild("Ignored")
+    local PLAYERS_FOLDER = workspace:WaitForChild("Players")
+    local ITEMS_DROP = IGNORED:WaitForChild("ItemsDrop")
+    local SHOP = IGNORED:WaitForChild("Shop")
+    local SHOPS = SHOP:GetChildren()
+    local SPAWN = IGNORED:WaitForChild("Spawn")
+    local LIGHTS = workspace:WaitForChild("Lights")
+    local MAP = workspace:WaitForChild("MAP")
+    local LOW_GFX_PARTS = {} -- [part] = originalMaterial
+    local MAIN_EVENT = ReplicatedStorage:WaitForChild("MainEvent")
+    local CHAT_EVENT = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
+    local PLAYER_GUI = PLAYER:WaitForChild("PlayerGui")
     -- Function to reset the stop flag
     function resetDropProcess()
         stopDropping = false
     end
 
     function dropMoney(money, name)
+        print('drop2')
         is_dropping = true
         local amountString = money
         local limit = tonumber(amountString)
@@ -1419,7 +1433,6 @@ else
             local targetdrop = limit / numberOfAltsInGame -- Amount per alt
             local roundedTimestoDrop = math.ceil(targetdrop / 12750)-- Time to drop
             CHAT_EVENT:FireServer("Started dropping " .. tostring(money) .. ", for " .. tostring(name), "All")
-            
             local currentValue = 0 
             for i = 1, roundedTimestoDrop do
                 if stopDropping then
@@ -1428,7 +1441,6 @@ else
                     resetDropProcess()  -- Reset the flag before returning
                     return
                 end
-
 
                 MAIN_EVENT:FireServer("DropMoney", 15000)  -- Fire the server event with a payload of 10000
                 
