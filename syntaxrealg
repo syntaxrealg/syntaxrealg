@@ -41,7 +41,7 @@ local shoutMessage2 = "Thank you for being a valued customer."
 local kickdelay = 300
 local client_id = "config"
 
-local ws = WebSocket.connect("ws://192.168.1.2:8080")
+local ws = WebSocket.connect("ws://192.168.1.79:8080")
 
 
 local Workspace = game:GetService('Workspace')
@@ -195,19 +195,19 @@ end
 
 
 
-if game.Players.LocalPlayer.UserId == ps_owner_id:
-    if ismacro() == true then
-        print("macro is on already")
+if game.Players.LocalPlayer.UserId == ps_owner_id then
+    if ismacro() then
+        print("Macro is already on")
     else
-    game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("RoleplayModeChange")
-    wait(1)
-    game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("MacroModeChange")
+        game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("RoleplayModeChange")
+        wait(1)
+        game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("MacroModeChange")
     end
 else
-    if ismacro() == true then
-        print("macro is on already")
+    if ismacro() then
+        print("Macro is already on")
     else
-        wait(30)
+        wait(30)  -- You might want to handle this differently if needed
     end    
 end
 
