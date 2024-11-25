@@ -367,7 +367,7 @@ if result == 1 then
     local MAIN_EVENT = ReplicatedStorage:WaitForChild("MainEvent")
     local CHAT_EVENT = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
     local PLAYER_GUI = PLAYER:WaitForChild("PlayerGui")
-    --local CORE_GUI = game.CoreGui
+    local CORE_GUI = game.CoreGui
 
 
 
