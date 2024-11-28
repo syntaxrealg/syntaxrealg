@@ -45,7 +45,6 @@ local localPlayer = Players.LocalPlayer
 local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
 local ws = WebSocket.connect("ws://192.168.1.5:8080")
 
-
 local function makeEverythingInvisible()
     -- Get all parts in the workspace
     local allParts = game.Workspace:GetDescendants()
@@ -228,8 +227,10 @@ local currencyPostFixes = {
     ["m"] = 1000000,
     ["b"] = 1000000000,
 }
-local function Track(user,amount,D_user_id,D_guild)
-    print("running track")
+local function Track(user, amount, D_user_id, D_guild)
+    print("running track for " .. user)
+    
+    -- Process amount with currency post-fix
     for postFix, value in pairs(currencyPostFixes) do
         if string.find(amount, postFix) then
             local rawNumberString = string.gsub(amount, postFix, "")
@@ -239,68 +240,72 @@ local function Track(user,amount,D_user_id,D_guild)
         end
     end
 
+    -- Update amount based on userList
     if userList[user] then
         local value = userList[user]
         amount = amount + value
         deleteUser(user)
     end
 
+    print("amount", amount)
 
-    print("amount",amount)
-
+    -- Wait for the player to be found in the game
     repeat task.wait()
     until game:GetService("Players"):FindFirstChild(user)
     
-    target = game:GetService("Players"):FindFirstChild(user)
+    -- Localize the target variable for each coroutine (this avoids shared state)
+    local target = game:GetService("Players"):FindFirstChild(user)
     
     print("target found: ", target)
 
     local oldcurrency = tonumber(target:WaitForChild("DataFolder"):WaitForChild("Currency").Value)
-    local need = oldcurrency + amount 
+    local need = oldcurrency + amount
     local Channel_ID = getChannelIdByUserId(user)
-    local User_ID = target.UserId
-    print("Channel_ID",Channel_ID)
-    print("User_ID",User_ID)
-    print("oldcurrency",oldcurrency)
-    print("need",need)
+    local User_ID = target.UserId  -- Correct User_ID from the localized 'target'
+    
+    print("Channel_ID", Channel_ID)
+    print("User_ID", User_ID)
+    print("oldcurrency", oldcurrency)
+    print("need", need)
 
     local discord_id = D_user_id or "False"
     local discord_guild = D_guild or "False"
+    
+    -- Send starter data with correct User_ID
     local starter_data = string.format("%s %s %s %s %s %s %s %s", client_id, "ADD-USER", Channel_ID, User_ID, oldcurrency, need, discord_id, discord_guild)
     ws:Send(starter_data)
     
     local new 
-    
-    repeat task.wait()
 
-        target = game:GetService("Players"):FindFirstChild(user)
+    -- Monitor balance until the target has enough currency
+    repeat task.wait()
+        target = game:GetService("Players"):FindFirstChild(user)  -- Make sure to check again in the loop
         if target then
             new = tonumber(target:WaitForChild("DataFolder"):WaitForChild("Currency").Value)
             local updated = string.format("%s %s %s %s", client_id, "UPDATE-BALANCE", Channel_ID, new)
             ws:Send(updated)
         end
-    
     until new >= need or target == nil
-    
-       if new >= need  then 
-            print("Target reached there goal: " .. tostring(new))
-            removeUser(user)
-            local updated2 = string.format("%s %s %s %s", client_id, "UPDATE-BALANCE", Channel_ID, new)
-            ws:Send(updated2)
-            local finished_M = string.format("%s %s %s", client_id, "BLOCK", user)
-            ws:Send(finished_M)
-            shout("Please leave the game " .. user .. " or you will be kicked.")
-            wait(10)
-            vipKick(target)
-            return true 
-       else
-            print("target left game")
-            local remaining = need - new
-            addUser(user, remaining)
-            return false
-       end 
-    
+
+    if new >= need then
+        print("Target reached their goal: " .. tostring(new))
+        removeUser(user)
+        local updated2 = string.format("%s %s %s %s", client_id, "UPDATE-BALANCE", Channel_ID, new)
+        ws:Send(updated2)
+        local finished_M = string.format("%s %s %s", client_id, "BLOCK", user)
+        ws:Send(finished_M)
+        shout("Please leave the game " .. user .. " or you will be kicked.")
+        wait(10)
+        vipKick(target)
+        return true
+    else
+        print("target left game")
+        local remaining = need - new
+        addUser(user, remaining)
+        return false
+    end
 end
+
 
 
 
@@ -366,28 +371,39 @@ local function onPlayerAdded(player)
         repeat
             task.wait()
         until player.Character and player.Character:FindFirstChild("FULLY_LOADED_CHAR") ~= nil        
+        
         print("Player joined:", player.Name)
+        
         if userList[player.Name] then
             print("player is in userlist adding them")
-            Track(player.Name,"1k")
+            Track(player.Name, "1k")
         elseif userExists(player.Name) then
-            print("user exist in list not kicking")
+            print("user exists in list not kicking")
         else
             if not isProtectedPlayer(player.UserId) then
                 print(player.Name, " is not in blocking them")
                 shout("Please leave the game " .. player.Name .. " or you will be kicked.")
                 wait(20)
-                local finished_L = string.format("%s %s %s", client_id, "BLOCK", player.Name)
-                ws:Send(finished_L)
-                wait(10)
-                target = game:GetService("Players"):FindFirstChild(player.Name)
-                vipKick(target)
+                
+                -- Use a localized variable for target2 here
+                local target2 = game:GetService("Players"):FindFirstChild(player.Name)
+                
+                -- Only proceed if target2 is found
+                if target2 then
+                    local finished_L = string.format("%s %s %s", client_id, "BLOCK", player.Name)
+                    ws:Send(finished_L)
+                    wait(10)
+                    vipKick(target2)  -- Kick the player if target2 is found
+                else
+                    print("Target2 not found for player:", player.Name)
+                end
             else
-                print("player is a admin not kicking")
+                print("player is an admin, not kicking")
             end
         end
     end
 end
+
 
 Players.PlayerAdded:Connect(onPlayerAdded)
 settings().Rendering.QualityLevel = 1
