@@ -43,7 +43,7 @@ local replicatedStorage = game:GetService("ReplicatedStorage")
 local mainEvent = replicatedStorage:WaitForChild("MainEvent")
 local localPlayer = Players.LocalPlayer
 local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
-local ws = WebSocket.connect("ws://192.168.1.20:8080")
+local ws = WebSocket.connect("ws://192.168.1.31:8080")
 
 local function makeEverythingInvisible()
     -- Get all parts in the workspace
