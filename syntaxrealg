@@ -346,7 +346,7 @@ end
 local function dropCashIfNeeded()
     while true do
         task.wait(15.5)
-        if countFloorCash() < 3000000 then
+        if countFloorCash() < 10000000 then
 
             if isOwnerInGame() then
                 mainEvent:FireServer("DropMoney", 15000)
