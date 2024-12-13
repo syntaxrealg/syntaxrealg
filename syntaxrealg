@@ -1,6 +1,6 @@
 script_key = 'YkTlhBECJMPTAEbZObjLHvRzfdBqoTWf'
 getgenv().AutofarmSettings = {
-    ["Fps"] = 8,
+    ["Fps"] = 6,
     ["Underground"] = true,
 
     ["Webhook"] = {
