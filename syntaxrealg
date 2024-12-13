@@ -10,7 +10,7 @@ getgenv().AutofarmSettings = {
 
     ["Serverhop"] = {
         ["Cycle"]   = 3,        -- 1 = After dying once.
-        ["Time"]    = 160,      -- 1 = After 1 Minute.
+        ["Time"]    = 60,      -- 1 = After 1 Minute.
         ["Kick"]    = true,     -- true = After getting kicked.
         ["Blacklisted_IDs"] = {
             1234567890,  -- Existing ID placeholder
