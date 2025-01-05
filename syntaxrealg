@@ -1,49 +1,512 @@
-script_key = 'SoEytWWvuWwXinJrOjYUUiyZMhNyaplc'
+getgenv().alts = { 
+    7816242098,
+    7797161375,
+    7797139700,
+    7797140694,
+    7797153563,
+    7797175372,
+    7797176330,
+    7797182302,
+    7797157218,
+    7797173938,
+    7797172429,
+    7797183862,
+    7797164116,
+    7797161164,
+    7797161173,
+    7797160208,
+    7797189774,
+    7797167654,
+    7797166704,
+    7797179014,
+    7797196792,
+    7724666457,
+    7724674811,
+    7723317512,
+    7724667310,
+    7724675711,
+    7724648552,
+    7724481856,
+    7724540834,
+    7724508400,
+    7724470848,
+    7724465061,
+    7724476329,
+    7724505320
+}
+getgenv().dont_kick = {
+    3311210222,
+    337641113,
+    2682673712,
+    7228189221,
+}
+local ps_owner = 7816242098
+local client_id = "config"
+local Players = game:GetService('Players')
+local Terrain = Workspace:FindFirstChild('Terrain')
+local Lighting = game:GetService("Lighting")
+local Workspace = game:GetService('Workspace')
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local mainEvent = replicatedStorage:WaitForChild("MainEvent")
+local localPlayer = Players.LocalPlayer
+local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+local ws = WebSocket.connect("ws://epic-mc.ddns.net:8080")
 
-getgenv().AutofarmSettings = {
-    ["Fps"] = 6,
-    ["InstaTP"] = true,
-    ["Underground"] = false,
+local function makeEverythingInvisible()
+    -- Get all parts in the workspace
+    local allParts = game.Workspace:GetDescendants()
 
-    ["Webhook"] = {
-        ["URL"] = "https://discord.com/api/webhooks/1226990588721758240/h6xZqIiMf7I60jCdOOimWwRR21BNwq3PTtRt8Ks5gLByaaBgwom6Gtal8WszxsfNFvjT",
-        ["Interval"] = 10
-    },
+    -- Iterate through all parts and make them invisible
+    for _, part in ipairs(allParts) do
+        if part:IsA("BasePart") then
+            part.Transparency = 1
+        end
+    end
+end
 
-    ["Serverhop"] = {
-        ["Cycle"]   = 3,        -- 1 = After dying once.
-        ["Time"]    = 480,       -- 1 = After 1 Minute.
-        ["Kick"]    = true,     -- true = After getting kicked.
-        ["Blacklisted_IDs"] = { 
-            15427717, 201454243, 822999, 63794379, 17260230,
-            28357488, 93101606, 8195210, 89473551, 16917269,
-            85989579, 1553950697, 476537893, 155627580, 31163456,
-            7200829, 25717070, 201454243, 15427717, 63794379,
-            16138978, 60660789, 17260230, 16138978, 1161411094,
-            9125623, 11319153, 34758833, 194109750, 35616559,
-            1257271138, 28885841, 23558830, 25717070, 4255947062,
-            29242182, 2395613299, 3314981799, 3390225662, 2459178,
-            2846299656, 2967502742, 7001683347, 7312775547, 328566086,
-            170526279, 99356639, 352087139, 6074834798, 2212830051,
-            3944434729, 5136267958, 84570351, 542488819, 163721789,
-            352087139, 4255947062,
-            7765280108, 7765278335, 7765282411, 7765308605,
-            7765484258, 7765505854, 7765531686, 7765522431,
-            7765924608, 7765919321,
-            7789875057, 7789982702, 7789988684, 7789986662,
-            7789991361, 7790005221, 7789985003, 7790034349,
-            7790018064, 7790038260, 7790046962, 7790049947,
-            7790042055, 7790079794, 7790078305, 7790078760,
-            7790082570, 7790081081, 7790075212, 7790086064,
-            7797161375, 7797139700, 7797140694, 7797153563,
-            7797175372, 7797176330, 7797182302, 7797157218,
-            7797173938, 7797172429, 7797183862, 7797164116,
-            7797161164, 7797161173, 7797160208, 7797189774,
-            7797167654, 7797166704, 7797179014, 7797196792
-        }
-    },
+makeEverythingInvisible()
 
-    " discord.gg/iku "
+local teleportPositions = {
+    { -393.01, 15, -338 },
+    { -381.01, 15, -338 },
+    { -369.01, 15, -338 },
+    { -357.01, 15, -338 },
+    { -393.01, 15, -325 },
+    { -381.01, 15, -325 },
+    { -369.01, 15, -325 },
+    { -357.01, 15, -325 },
+    { -393.01, 15, -312 },
+    { -381.01, 15, -312 },
+    { -369.01, 15, -312 },
+    { -357.01, 15, -312 },
+    { -393.01, 15, -299 },
+    { -381.01, 15, -299 },
+    { -369.01, 15, -299 },
+    { -357.01, 15, -299 },
+    { -393.01, 15, -286 },
+    { -381.01, 15, -286 },
+    { -369.01, 15, -286 },
+    { -357.01, 15, -286 },
+    { -393.01, 15, -273 },
+    { -381.01, 15, -273 },
+    { -369.01, 15, -273 },
+    { -357.01, 15, -273 },
+    { -393.01, 15, -260 },
+    { -381.01, 15, -260 },
+    { -369.01, 15, -260 },
+    { -357.01, 15, -260 },
+    { -393.01, 15, -247 },
+    { -381.01, 15, -247 },
+    { -369.01, 15, -247 },
+    { -357.01, 15, -247 },
+    { -393.01, 15, -233 },
+    { -381.01, 15, -233 },
+    { -369.01, 15, -233 },
+    { -357.01, 15, -233 },
+    { -405.01, 15, -299 },
+    { -405.01, 15, -286 },
+    { -405.01, 15, -273 },
 }
 
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/2f5a5d4b9fc7ed0f115580a53bfab777.lua"))()
+function getAltNumber(userId)
+    local alts = getgenv().alts
+    for i, id in ipairs(alts) do
+        if userId == id then
+            return i
+        end
+    end
+    return false
+end
+ 
+local function teleport(position)
+    local position = CFrame.new(position[1], position[2], position[3])
+    task.spawn(function()
+        while task.wait() do
+            pcall(function()
+                localPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = position
+                localPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0, 0, 0)
+            end)
+        end
+    end)
+end
+
+local allowedusers = {}
+local userList = {}
+
+local function printUserList()
+    for userId, value in pairs(userList) do
+        print(userId .. ": " .. value)
+    end
+end
+
+local function isProtectedPlayer(userId)
+    for _, id in ipairs(getgenv().alts) do
+        if userId == id then
+            return true
+        end
+    end
+    for _, id in ipairs(getgenv().dont_kick) do
+        if userId == id then
+            return true
+        end
+    end
+    return false
+end
+
+local function vipKick(player)
+
+    if not isProtectedPlayer(player.UserId) then
+        game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("VIP_CMD", "Kick", player)
+    end
+    
+end
+
+local function shout(message)
+    game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("Shout", message)
+end
+
+
+local function addUser(userId, value)
+    userList[userId] = value  
+end
+
+local function addUseralloweduser(userId, channelId)
+    table.insert(allowedusers, { userId = userId, channelId = channelId })
+end
+
+local function getChannelIdByUserId(userId)
+    for _, user in ipairs(allowedusers) do
+        -- Check if the userId matches
+        if user.userId == userId then
+            return user.channelId  -- Return the associated channelId
+        end
+    end
+    -- If userId is not found
+    return nil  -- Return nil if the userId is not found
+end
+
+
+local function userExists(userId)
+    -- Iterate over the allowedusers table
+    for _, user in ipairs(allowedusers) do
+        -- Check if the userId matches
+        if user.userId == userId then
+            return true
+        end
+    end
+    -- Return false if no match is found
+    return false
+end
+
+
+local function deleteUser(userId)
+    userList[userId] = nil
+end
+
+
+local function removeUser(userId)
+    for index, user in ipairs(allowedusers) do
+        -- Check if the userId matches
+        if user.userId == userId then
+            -- Remove the user from the list
+            table.remove(allowedusers, index)
+            print("User " .. userId .. " has been removed.")
+            return  -- Exit the function after removing the user
+        end
+    end
+    -- If user was not found, print this message
+    print("User " .. userId .. " not found.")
+end
+
+function teleportBasedOnAltNumber(player)
+    local userId = player.UserId
+    local altNumber = getAltNumber(userId)
+    local position = teleportPositions[altNumber] or { -381.01, 35.75, -286 }
+
+    teleport(position)
+end
+
+
+
+
+local currencyPostFixes = {
+    ["k"] = 1000,
+    ["m"] = 1000000,
+    ["b"] = 1000000000,
+}
+local function Track(user, amount, D_user_id, D_guild)
+    print("running track for " .. user)
+    
+    -- Process amount with currency post-fix
+    for postFix, value in pairs(currencyPostFixes) do
+        if string.find(amount, postFix) then
+            local rawNumberString = string.gsub(amount, postFix, "")
+            local amountNumber = tonumber(rawNumberString)
+            amount = amountNumber * value
+            break
+        end
+    end
+
+    -- Update amount based on userList
+    if userList[user] then
+        local value = userList[user]
+        amount = amount + value
+        deleteUser(user)
+    end
+
+    print("amount", amount)
+
+    -- Wait for the player to be found in the game
+    repeat task.wait()
+    until game:GetService("Players"):FindFirstChild(user)
+    
+    -- Localize the target variable for each coroutine (this avoids shared state)
+    local target = game:GetService("Players"):FindFirstChild(user)
+    
+    print("target found: ", target)
+
+    local oldcurrency = tonumber(target:WaitForChild("DataFolder"):WaitForChild("Currency").Value)
+    local need = oldcurrency + amount
+    local Channel_ID = getChannelIdByUserId(user)
+    local User_ID = target.UserId  -- Correct User_ID from the localized 'target'
+    
+    print("Channel_ID", Channel_ID)
+    print("User_ID", User_ID)
+    print("oldcurrency", oldcurrency)
+    print("need", need)
+
+    local discord_id = D_user_id or "False"
+    local discord_guild = D_guild or "False"
+    
+    -- Send starter data with correct User_ID
+    local starter_data = string.format("%s %s %s %s %s %s %s %s", client_id, "ADD-USER", Channel_ID, User_ID, oldcurrency, need, discord_id, discord_guild)
+    ws:Send(starter_data)
+    
+    local new 
+
+    -- Monitor balance until the target has enough currency
+    repeat task.wait()
+        target = game:GetService("Players"):FindFirstChild(user)  -- Make sure to check again in the loop
+        if target then
+            new = tonumber(target:WaitForChild("DataFolder"):WaitForChild("Currency").Value)
+            local updated = string.format("%s %s %s %s", client_id, "UPDATE-BALANCE", Channel_ID, new)
+            ws:Send(updated)
+        end
+    until new >= need or target == nil
+
+    if new >= need then
+        print("Target reached their goal: " .. tostring(new))
+        removeUser(user)
+        local updated2 = string.format("%s %s %s %s", client_id, "UPDATE-BALANCE", Channel_ID, new)
+        ws:Send(updated2)
+        local finished_M = string.format("%s %s %s", client_id, "BLOCK", user)
+        ws:Send(finished_M)
+        shout("Please leave the game " .. user .. " or you will be kicked.")
+        wait(10)
+        vipKick(target)
+        return true
+    else
+        print("target left game")
+        local remaining = need - new
+        addUser(user, remaining)
+        return false
+    end
+end
+
+
+
+
+local function cashToInt(stringValue)
+	local noDollarSign = string.sub(stringValue, 2, #stringValue)
+	local noComma = string.gsub(noDollarSign, ",", "")
+	local toInt = tonumber(noComma)
+	
+	return toInt
+end
+
+local function countFloorCash()
+    local totalFloorCashAmount = 0
+
+    for _,v in pairs(workspace.Ignored.Drop:GetChildren()) do
+        if v:IsA("Part") then
+            local amount = cashToInt(v.BillboardGui.TextLabel.Text)
+            --TotalFloorCash
+            totalFloorCashAmount += amount
+        end
+    end
+
+    return totalFloorCashAmount
+end
+
+
+local function isOwnerInGame()
+    for _, player in pairs(Players:GetPlayers()) do
+        if player.UserId == ps_owner then
+            return true
+        end
+    end
+    return false
+end
+
+
+
+local function dropCashIfNeeded()
+    while true do
+        task.wait(15.5)
+        if countFloorCash() < 5000000 then
+
+            if isOwnerInGame() then
+                mainEvent:FireServer("DropMoney", 15000)
+            else
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                local chatEvents = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents")
+                local CHAT_EVENT = chatEvents:WaitForChild("SayMessageRequest")
+                CHAT_EVENT:FireServer("Waiting for ps owner to be in server.", "All")
+            end
+        end
+    end
+end
+local co1 = coroutine.create(function()
+    dropCashIfNeeded()
+end)
+coroutine.resume(co1)
+
+
+local function onPlayerAdded(player)
+    if localPlayer.UserId == ps_owner then
+        player.CharacterAdded:Wait()
+        repeat
+            task.wait()
+        until player.Character and player.Character:FindFirstChild("FULLY_LOADED_CHAR") ~= nil        
+        
+        print("Player joined:", player.Name)
+        
+        if userList[player.Name] then
+            print("player is in userlist adding them")
+            Track(player.Name, "1k")
+        elseif userExists(player.Name) then
+            print("user exists in list not kicking")
+        else
+            if not isProtectedPlayer(player.UserId) then
+                print(player.Name, " is not in blocking them")
+                shout("Please leave the game " .. player.Name .. " or you will be kicked.")
+                wait(20)
+                
+                -- Use a localized variable for target2 here
+                local target2 = game:GetService("Players"):FindFirstChild(player.Name)
+                
+                -- Only proceed if target2 is found
+                if target2 then
+                    local finished_L = string.format("%s %s %s", client_id, "BLOCK", player.Name)
+                    ws:Send(finished_L)
+                    wait(10)
+                    vipKick(target2)  -- Kick the player if target2 is found
+                else
+                    print("Target2 not found for player:", player.Name)
+                end
+            else
+                print("player is an admin, not kicking")
+            end
+        end
+    end
+end
+
+
+Players.PlayerAdded:Connect(onPlayerAdded)
+settings().Rendering.QualityLevel = 1
+UserSettings().GameSettings.MasterVolume = 0
+setfpscap(5)
+    
+ 
+
+
+local GC = getconnections or get_signal_cons
+    if GC then
+        for i,v in pairs(GC(Players.LocalPlayer.Idled)) do
+            if v["Disable"] then
+                v["Disable"](v)
+            elseif v["Disconnect"] then
+                v["Disconnect"](v)
+            end
+        end
+    end
+print("Ran")
+
+
+function ismacro() 
+    return game:GetService("Lighting"):GetAttribute("MacroAllow") or false 
+end 
+
+
+
+
+if localPlayer.UserId ~= ps_owner then
+    if ismacro() == false then
+        wait(30)
+    end
+    teleportBasedOnAltNumber(localPlayer)
+else
+    if ismacro() == false then
+        game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("RoleplayModeChange")
+        wait(2)
+        game:GetService("ReplicatedStorage"):WaitForChild("MainEvent"):FireServer("MacroModeChange")
+    end
+    teleportBasedOnAltNumber(localPlayer)
+end
+
+
+ws:Send(client_id)
+
+ws.OnMessage:Connect(function(message)
+        print("Message received:", message)
+        local parts = {}
+        
+        for word in string.gmatch(message, "%S+") do
+            table.insert(parts, word)
+        end
+        
+        if parts[1] == "drop" then
+            if #parts > 2 then
+                local money = parts[2]
+                local name = parts[3]
+                local Channel = parts[4]
+                local d_id = parts[5]
+                local g_id = parts[6]
+                
+                local co = coroutine.create(function()
+                    print("Drop command received")
+                    if localPlayer.UserId == ps_owner then
+                        print("Running stuff")
+                        addUseralloweduser(name, Channel)
+                        Track(name, money, d_id, g_id)
+                    end
+                end)
+                coroutine.resume(co)
+            else
+                print("Invalid drop command format")
+            end
+        elseif parts[1] == "kick" then
+            local player = parts[2]
+            local co = coroutine.create(function()
+                print("Running kick player command")
+                Kick(player)
+            end)
+            coroutine.resume(co)
+        elseif parts[1] == "shout" then
+            local startIndex = 2
+            local endIndex = #parts - 1
+            local messageParts = {}
+
+            for i = startIndex, endIndex do
+                table.insert(messageParts, parts[i])
+            end
+            local messageString = table.concat(messageParts, " ")
+            local co = coroutine.create(function()
+                print("Running shout command")
+                shout(messageString)
+            end)
+            coroutine.resume(co)
+        else
+            print("Unknown command")
+        end
+end)
