@@ -378,7 +378,7 @@ if table.find(getgenv().alts, localPlayer.UserId) then
 		
 
 		if localPlayer.UserId == ps_owner1 then
-			local ws = WebSocket.connect("ws://" .. IPV4 .. PORT)
+			local ws = WebSocket.connect("ws://" .. IPV4 .. ":" .. PORT)
 			ws:Send(client_id)
 			
 
