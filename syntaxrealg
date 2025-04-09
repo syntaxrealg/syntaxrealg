@@ -19,7 +19,7 @@ getgenv().ps_owner1 = 8006102117
 getgenv().pre_drop = 10000000
 getgenv().fps_cap = 3
 
-local IPV4 = "127.0.0.1"
+local IPV4 = "37.27.21.91"
 local PORT = "5035"
 
 
