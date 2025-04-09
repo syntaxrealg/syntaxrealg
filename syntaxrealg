@@ -15,13 +15,12 @@ getgenv().dont_kick = {
 	3311210222,
 }
 
-getgenv().ps_owner1 = 8006102117
-getgenv().pre_drop = 10000000
-getgenv().fps_cap = 3
+local ps_owner1 = 8006102117
+local pre_drop = 10000000
+local fps_cap = 3
 
 local IPV4 = "37.27.21.91"
 local PORT = "5035"
-local client_id = "Server-"..ps_owner1
 
 local Players = game:GetService('Players')
 local Terrain = Workspace:FindFirstChild('Terrain')
