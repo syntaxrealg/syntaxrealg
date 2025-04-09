@@ -21,7 +21,7 @@ getgenv().fps_cap = 3
 
 local IPV4 = "37.27.21.91"
 local PORT = "5035"
-
+local client_id = "Server-"..ps_owner1
 
 local Players = game:GetService('Players')
 local Terrain = Workspace:FindFirstChild('Terrain')
@@ -379,7 +379,9 @@ if table.find(getgenv().alts, localPlayer.UserId) then
 
 		if localPlayer.UserId == ps_owner1 then
 			local ws = WebSocket.connect("ws://" .. IPV4 .. ":" .. PORT)
-			ws:Send(client_id)
+			local bob = "Server-"..ps_owner1
+			print(bob)
+			ws:Send(bob)
 			
 
 
