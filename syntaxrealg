@@ -19,9 +19,8 @@ getgenv().dont_kick = {
 getgenv().ps_owner1 = 8006102117
 getgenv().pre_drop = 10000000
 getgenv().fps_cap = 3
-
-local IPV4 = "37.27.21.91"
-local PORT = "5035"
+local IPV4 = "157.180.26.113"
+local PORT = "5012"
 
 
 local Players = game:GetService('Players')
