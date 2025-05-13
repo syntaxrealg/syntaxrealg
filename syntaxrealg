@@ -15,7 +15,7 @@ getgenv().dont_kick = {
 	3311210222,
 }
 
-getgenv().ps_owner1 = 8006102117
+getgenv().ps_owner1 = 3301174240
 getgenv().pre_drop = 10000000
 getgenv().fps_cap = 3
 
