@@ -16,8 +16,8 @@ getgenv().dont_kick = {
 }
 
 getgenv().ps_owner1 = 3301174240
-getgenv().pre_drop = 10000000
-getgenv().fps_cap = 3
+getgenv().pre_drop = 5000000
+getgenv().fps_cap = 6
 
 local IPV4 = "157.180.72.201"
 local PORT = "5053"
