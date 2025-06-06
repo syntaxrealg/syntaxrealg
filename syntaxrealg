@@ -19,8 +19,8 @@ getgenv().ps_owner1 = 3301174240
 getgenv().pre_drop = 15000000
 getgenv().fps_cap = 5
 
-local IPV4 = "157.180.72.201"
-local PORT = "5053"
+local IPV4 = "45.43.163.162"
+local PORT = "25525"
 
 
 local Players = game:GetService('Players')
