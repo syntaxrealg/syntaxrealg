@@ -13,6 +13,7 @@ getgenv().alts = {
 
 getgenv().dont_kick = {
 	3311210222,
+	3442498559
 }
 
 getgenv().ps_owner1 = 3301174240
