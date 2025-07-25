@@ -1,3 +1,4 @@
 getgenv().PS_Owner = 8006049069
 getgenv().FPS = 5
+task.wait(20)
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Talkingben0814/hi123/refs/heads/main/hi"))()
